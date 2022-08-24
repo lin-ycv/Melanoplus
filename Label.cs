@@ -53,7 +53,7 @@ namespace Melanoplus
         }
 
         public static List<string> Exclude = new List<string>();
-        private bool enabled = true;
+        private bool enabled = false;
 
         public override bool Visible
         {

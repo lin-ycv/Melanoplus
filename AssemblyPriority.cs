@@ -1,4 +1,5 @@
-﻿using Grasshopper.GUI.Canvas;
+﻿using Grasshopper;
+using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,9 @@ namespace Melanoplus
         public override GH_LoadingInstruction PriorityLoad()
         {
             GH_Canvas.WidgetListCreated += new GH_Canvas.WidgetListCreatedEventHandler(AddWidget);
-            Grasshopper.Instances.CanvasCreated += LoadQuickButtons;
-            var server = Grasshopper.Instances.ComponentServer;
+            Instances.CanvasCreated += LoadQuickButtons;
+            Instances.CanvasCreated += LoadMenuOptions;
+            var server = Instances.ComponentServer;
             server.AddCategoryShortName("Melanoplus", "Plus");
             server.AddCategorySymbolName("Melanoplus", '➕');
             server.AddCategoryIcon("Melanoplus", Properties.Resources.MelanoplusSimple16);
@@ -31,8 +33,8 @@ namespace Melanoplus
 
         private void LoadQuickButtons(GH_Canvas canvas)
         {
-            Grasshopper.Instances.CanvasCreated -= LoadQuickButtons;
-            var editor = Grasshopper.Instances.DocumentEditor;
+            Instances.CanvasCreated -= LoadQuickButtons;
+            var editor = Instances.DocumentEditor;
             //editor.SuspendLayout();
             ((ToolStrip)editor.Controls[0].Controls[1]).Items.AddRange(QuickButtons);
             //editor.ResumeLayout();
@@ -41,11 +43,12 @@ namespace Melanoplus
         {
             get {
                 List<ToolStripItem> buttons = new List<ToolStripItem>(){
-                    new ToolStripButton("Create Snippet", Properties.Resources.SnippetBuilder, SaveSnippetClick){
+                    new ToolStripButton("Create Snippet", Properties.Resources.SnippetBuilder, (s,e) => Snippet.Save(Instances.ActiveCanvas.Document)){
                         Name = "Melanoplus_Snippet",
                         DisplayStyle = ToolStripItemDisplayStyle.Image,
                     },
-                    new ToolStripButton("Clean Canvas", Properties.Resources.CleanCanvas, CleanCanvasClick){
+                    //move cleancanvas to solution menu
+                    new ToolStripButton("Clean Canvas", Properties.Resources.CleanCanvas, (s,e) => CleanCanvas.Clean(Instances.ActiveCanvas.Document)){
                         Name = "Melanoplus_CleanCanvas",
                         DisplayStyle = ToolStripItemDisplayStyle.Image,
                     },
@@ -53,13 +56,18 @@ namespace Melanoplus
                 return buttons.ToArray();
             }
         }
-        private void SaveSnippetClick(object s, EventArgs e)
+
+        private void LoadMenuOptions(GH_Canvas canvas)
         {
-            Snippet.Save(Grasshopper.Instances.ActiveCanvas.Document);
-        }
-        private void CleanCanvasClick(object s, EventArgs e)
-        {
-            CleanCanvas.Clean(Grasshopper.Instances.ActiveCanvas.Document);
+            Instances.CanvasCreated -= LoadMenuOptions;
+            var editor = Instances.DocumentEditor;
+            if(editor != null)
+            {
+                var mnuEdit = ((ToolStripMenuItem)editor.MainMenuStrip.Items["mnuEdit"]);
+                mnuEdit.MouseHover += (s, e) => mnuEdit.DropDownItems["mnuUnlockCluster"].Visible = (Instances.ActiveCanvas.Document!= null) && (Instances.ActiveCanvas.Document.SelectedCount > 0);
+                var index = mnuEdit.DropDownItems.IndexOfKey("mnuClusterSelection")+1;
+                mnuEdit.DropDownItems.Insert(index, new ToolStripMenuItem("Unlock", Properties.Resources.unlock, (s, e) => Cluster.Un(Instances.ActiveCanvas.Document), "mnuUnlockCluster"){ Visible = false });
+            }
         }
     }
 }
