@@ -1,4 +1,8 @@
-﻿using Grasshopper.GUI.Canvas;
+﻿using Eto.Forms;
+using Grasshopper;
+using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
+using Grasshopper.GUI.SettingsControls;
 using Grasshopper.GUI.Widgets;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
@@ -31,25 +35,26 @@ namespace Melanoplus
                 return Properties.Resources.Label;
             }
         }
+        internal static Font font = GH_FontServer.StandardItalic;
 
         public LabelWidget()
         {
             GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
-
+            var cvt = new FontConverter();
             if (settings.ConstainsEntry("Exclude"))
             {
                 Exclude = new List<string>(settings.GetValue("Exclude", "").Split(','));
+                font = (settings.GetValue("Font", "") is string str) ? cvt.ConvertFromInvariantString(str) as Font : GH_FontServer.StandardItalic;
             }
             else
             {
                 string Exclude_defaults = "Scribble,Panel,Value List,Button,Boolean Toggle,Number Slider,Sketch";
                 settings.SetValue("Enabled", enabled);
                 settings.SetValue("Exclude", Exclude_defaults);
+                settings.SetValue("Font", cvt.ConvertToInvariantString(font));
                 settings.WritePersistentSettings();
                 Exclude = new List<string>(Exclude_defaults.Split(','));
             }
-
-            Grasshopper.Instances.CanvasCreated += CanvasCreated;
         }
 
         public static List<string> Exclude = new List<string>();
@@ -60,17 +65,17 @@ namespace Melanoplus
             get { return enabled; }
             set
             {
+                
                 GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
                 if (value == true)
                 {
                     enabled = true;
-                    Exclude = new List<string>(settings.GetValue("Exclude", "").Split(','));
-                    Grasshopper.Instances.ActiveCanvas.CanvasPrePaintObjects += Label;
+                    Instances.ActiveCanvas.CanvasPrePaintObjects += Label;
                 }
                 else
                 {
                     enabled = false;
-                    Grasshopper.Instances.ActiveCanvas.CanvasPrePaintObjects -= Label;
+                    Instances.ActiveCanvas.CanvasPrePaintObjects -= Label;
                 }
                 settings.SetValue("Enabled", enabled);
                 settings.WritePersistentSettings();
@@ -87,13 +92,6 @@ namespace Melanoplus
             return;
         }
 
-        // Canvas Created Event Handler
-        static void CanvasCreated(GH_Canvas canvas)
-        {
-            Grasshopper.Instances.CanvasCreated -= CanvasCreated;
-            canvas.CanvasPrePaintObjects += Label;
-        }
-
         // Pain Object Event Handler
         static void Label(GH_Canvas canvas)
         {
@@ -103,7 +101,7 @@ namespace Melanoplus
             canvas.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             foreach (var comp in canvas.Document.Objects)
             {
-                
+
                 RectangleF bnd = comp.Attributes.Bounds;
                 if (!canvas.Viewport.IsVisible(ref bnd, 20) ||
                     Exclude.Contains(comp.Name) ||
@@ -118,7 +116,7 @@ namespace Melanoplus
                 if (comp.ToString() == "Grasshopper.Kernel.Components.GH_PlaceholderComponent")
                     name = comp.Name;
                 else
-                    name = ((comp.NickName == Grasshopper.Instances.ComponentServer.EmitObjectProxy(comp.ComponentGuid).Desc.NickName) || comp.NickName == string.Empty) ?
+                    name = ((comp.NickName == Instances.ComponentServer.EmitObjectProxy(comp.ComponentGuid).Desc.NickName) || comp.NickName == string.Empty) ?
                                     comp.Name : comp.NickName;
 
                 if (name.Length > 12)
@@ -126,36 +124,65 @@ namespace Melanoplus
                     string[] words = name.Split(' ');
                     StringBuilder sb = new StringBuilder();
                     int limit = 0;
-                    foreach(var w in words)
+                    foreach (var w in words)
                     {
                         if (limit > 12)
                         {
                             sb.Append(Environment.NewLine);
                             limit = 0;
                         }
-                        else if(limit > 0)
+                        else if (limit > 0)
                             sb.Append(' ');
                         sb.Append(w);
-                        limit += w.Length+1;
+                        limit += w.Length + 1;
                     }
                     name = sb.ToString();
                 }
 
-                using (Font font = new Font(
-                    SystemFonts.IconTitleFont.FontFamily,
-                    (float)(SystemFonts.DefaultFont.Size * (GH_Canvas.ZoomFadeMedium <= 6 ? 1.5: (GH_Canvas.ZoomFadeHigh == 0 ? 1 : 0.5))) / Grasshopper.GUI.GH_GraphicsUtil.UiScale,
-                    FontStyle.Italic))
+                using (StringFormat alignment = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
                 {
-                    using (StringFormat alignment = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
-                    {
-                        canvas.Graphics.DrawString(
-                            name,
-                            font, Brushes.Gray,
-                            x, y, alignment);
-                    }
+                    canvas.Graphics.DrawString(
+                        name,
+                        font, Brushes.Gray,
+                        x, y, alignment);
                 }
             }
         }
 
+    }
+    public class GH_LabelSettingsUI : IGH_SettingFrontend
+    {
+        public string Category => "Widgets";
+
+        public IEnumerable<string> Keywords => new string[1]
+        {
+        "Font",
+        };
+
+        public string Name => "Label";
+
+        public System.Windows.Forms.Control SettingsUI()
+        {
+            var fontpicker = new GH_FontControl
+            {
+                Font = LabelWidget.font,
+                Name = "FontPicker",
+                Size = new Size(553, 75),
+                BorderStyle = BorderStyle.None,
+            };
+            fontpicker.FontChanged += (s, e) => { 
+                LabelWidget.font = fontpicker.Font; 
+                Instances.ActiveCanvas.Refresh();
+                GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
+                settings.SetValue("Font", new FontConverter().ConvertToInvariantString(LabelWidget.font));
+                settings.WritePersistentSettings();
+            };
+            return fontpicker;
+        }
+
+        System.Windows.Forms.Control IGH_SettingFrontend.SettingsUI()
+        {
+            return this.SettingsUI();
+        }
     }
 }
