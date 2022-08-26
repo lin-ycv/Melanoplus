@@ -1,10 +1,13 @@
 ﻿using Grasshopper;
+using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Special;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -47,11 +50,6 @@ namespace Melanoplus
                         Name = "Melanoplus_Snippet",
                         DisplayStyle = ToolStripItemDisplayStyle.Image,
                     },
-                    //move cleancanvas to solution menu
-                    new ToolStripButton("Clean Canvas", Properties.Resources.CleanCanvas, (s,e) => CleanCanvas.Clean(Instances.ActiveCanvas.Document)){
-                        Name = "Melanoplus_CleanCanvas",
-                        DisplayStyle = ToolStripItemDisplayStyle.Image,
-                    },
                 };
                 return buttons.ToArray();
             }
@@ -63,10 +61,18 @@ namespace Melanoplus
             var editor = Instances.DocumentEditor;
             if(editor != null)
             {
-                var mnuEdit = ((ToolStripMenuItem)editor.MainMenuStrip.Items["mnuEdit"]);
-                mnuEdit.MouseHover += (s, e) => mnuEdit.DropDownItems["mnuUnlockCluster"].Visible = (Instances.ActiveCanvas.Document!= null) && (Instances.ActiveCanvas.Document.SelectedCount > 0);
-                var index = mnuEdit.DropDownItems.IndexOfKey("mnuClusterSelection")+1;
-                mnuEdit.DropDownItems.Insert(index, new ToolStripMenuItem("Unlock", Properties.Resources.unlock, (s, e) => Cluster.Un(Instances.ActiveCanvas.Document), "mnuUnlockCluster"){ Visible = false });
+                editor.SuspendLayout();
+                
+                var mnu = (ToolStripMenuItem)editor.MainMenuStrip.Items["mnuDisplay"];
+                var index = mnu.DropDownItems.IndexOfKey("mnuFullNames") + 1;
+                mnu.DropDownItems.Insert(index, new ToolStripMenuItem("Clean Canvas", Properties.Resources.CleanCanvas, (s, e) => CleanCanvas.Clean(canvas.Document), "mnuCleanCanvas") { ShortcutKeys = Keys.None });
+
+                mnu = (ToolStripMenuItem)editor.MainMenuStrip.Items["mnuEdit"];
+                index = mnu.DropDownItems.IndexOfKey("mnuClusterSelection") + 1;
+                mnu.DropDownItems.Insert(index, new ToolStripMenuItem("Unlock", Properties.Resources.unlock, (s, e) => Cluster.Un(canvas.Document), "mnuUnlockCluster") { Visible = true, Enabled = true, ShortcutKeys = System.Windows.Forms.Keys.U | System.Windows.Forms.Keys.Control });
+                
+                editor.ResumeLayout();
+                mnu.DropDownOpening += (s, e) => mnu.DropDownItems["mnuUnlockCluster"].Visible = canvas.IsDocument && canvas.Document.SelectedObjects().Any(o => o is GH_Cluster);
             }
         }
     }
