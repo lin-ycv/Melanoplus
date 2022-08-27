@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyPriority.cs" />
+    <Compile Include="CopyWires.cs" />
     <Compile Include="GroupName.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="CleanCanvas.cs" />
@@ -106,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\multiline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Copy_Wire.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

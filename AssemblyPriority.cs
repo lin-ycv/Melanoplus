@@ -31,8 +31,8 @@ namespace Melanoplus
 
         private void AddWidget(object s, GH_CanvasWidgetListEventArgs e)
         {
-            LabelWidget labelWidget = new LabelWidget();
-            e.AddWidget(labelWidget);
+            e.AddWidget(new LabelWidget());
+            e.AddWidget(new WiresWidget());
         }
 
         private void LoadQuickButtons(GH_Canvas canvas)
