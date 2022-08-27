@@ -21,6 +21,7 @@ namespace Melanoplus
             GH_Canvas.WidgetListCreated += new GH_Canvas.WidgetListCreatedEventHandler(AddWidget);
             Instances.CanvasCreated += LoadQuickButtons;
             Instances.CanvasCreated += LoadMenuOptions;
+            GH_DocumentEditor.AggregateShortcutMenuItems += AggregateShortcutMenuItems;
             var server = Instances.ComponentServer;
             server.AddCategoryShortName("Melanoplus", "Plus");
             server.AddCategorySymbolName("Melanoplus", '➕');
@@ -52,7 +53,7 @@ namespace Melanoplus
                 return buttons.ToArray();
             }
         }
-
+        internal static List<ToolStripMenuItem> MenuEntryAllowShortcut = new List<ToolStripMenuItem>() { };
         private void LoadMenuOptions(GH_Canvas canvas)
         {
             Instances.CanvasCreated -= LoadMenuOptions;
@@ -63,15 +64,25 @@ namespace Melanoplus
                 
                 var mnu = (ToolStripMenuItem)editor.MainMenuStrip.Items["mnuDisplay"];
                 var index = mnu.DropDownItems.IndexOfKey("mnuFullNames") + 1;
-                mnu.DropDownItems.Insert(index, new ToolStripMenuItem("Clean Canvas", Properties.Resources.CleanCanvas, (s, e) => CleanCanvas.Clean(canvas.Document), "mnuCleanCanvas") { ShortcutKeys = Keys.None });
+                var cleancanvas = new ToolStripMenuItem("Clean Canvas", Properties.Resources.CleanCanvas, (s, e) => CleanCanvas.Clean(canvas.Document), "mnuCleanCanvas");
+                mnu.DropDownItems.Insert(index, cleancanvas);
+                MenuEntryAllowShortcut.Add(cleancanvas);
+
 
                 mnu = (ToolStripMenuItem)editor.MainMenuStrip.Items["mnuEdit"];
                 index = mnu.DropDownItems.IndexOfKey("mnuClusterSelection") + 1;
-                mnu.DropDownItems.Insert(index, new ToolStripMenuItem("Unlock", Properties.Resources.unlock, (s, e) => Cluster.Un(canvas.Document), "mnuUnlockCluster") { Visible = true, Enabled = true, ShortcutKeys = System.Windows.Forms.Keys.U | System.Windows.Forms.Keys.Control });
-                
+                var cluster = new ToolStripMenuItem("Unlock", Properties.Resources.unlock, (s, e) => Cluster.Un(canvas.Document), "mnuUnlockCluster") { ShortcutKeys = System.Windows.Forms.Keys.U | System.Windows.Forms.Keys.Control };
+                mnu.DropDownItems.Insert(index, cluster);
+                MenuEntryAllowShortcut.Add(cluster);
+
                 editor.ResumeLayout();
                 mnu.DropDownOpening += (s, e) => mnu.DropDownItems["mnuUnlockCluster"].Visible = canvas.IsDocument && canvas.Document.SelectedObjects().Any(o => o is GH_Cluster);
             }
+        }
+        
+        private static void AggregateShortcutMenuItems(object sender, GH_MenuShortcutEventArgs e)
+        {
+            MenuEntryAllowShortcut.ForEach(e.AppendItem);
         }
     }
 }
