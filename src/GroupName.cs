@@ -13,7 +13,7 @@ namespace Melanoplus
     public class GroupName : GH_Component
     {
         public GroupName()
-          : base("Multiline ? Name", "GroupName",
+          : base("Multiline Name", "GroupName",
               "Adds multiline name to selected group(s)",
               "Melanoplus", "Utility")
         { }
