@@ -12,10 +12,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Melanoplus
 {
-    //should use menu option to switch between text and path to image
     public class R_HUD : GH_Component, IGH_VariableParameterComponent
     {
         public R_HUD() : base("Rhino HUD", "HUD", "Displays gh data on the viewport", "Melanoplus", "Display") { }
@@ -29,12 +29,39 @@ namespace Melanoplus
             foreach (var p in strParam)
                 Params.RegisterInputParam(p);
         }
+        readonly IGH_Param[] strParam = new IGH_Param[3]
+        {
+            new Param_Colour {Name = "colour", NickName = "c", Description = "Colour of displayed data [Optional]", Optional = true, Access = GH_ParamAccess.item  },
+            new Param_Boolean {Name = "centered", NickName = "m", Description = "Position as Mid-point [Optional]", Optional = true, Access = GH_ParamAccess.item },
+            new Param_Integer {Name = "size", NickName = "s", Description = "Size of text [Optional]", Optional = true, Access = GH_ParamAccess.item },
+        };
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Display Bitmap", Handler, true, isBitmap);
+        }
+        private void Handler(object sender, EventArgs e)
+        {
+            isBitmap = !isBitmap;
+            InputChange(null);
+        }
+        private void InputChange(GH_Document doc)
+        {
+            if (isBitmap)
+                for (int i = 4; i > 1; i--)
+                {
+                    Params.UnregisterInputParameter(Params.Input[i], true);
+                }
+            else
+                foreach (var p in strParam)
+                    Params.RegisterInputParam(p);
+            Params.OnParametersChanged();
+            ExpireSolution(true);
+        }
         public override void AddedToDocument(GH_Document document)
         {
             base.AddedToDocument(document);
             if (isBitmap)
-                foreach (var p in strParam)
-                    Params.UnregisterInputParameter(p, true);
+                InputChange(null);
         }
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
@@ -51,24 +78,26 @@ namespace Melanoplus
             else if (coor.Y < 0) coor.Y = 0;
             arrow = new Line(new Point3d(0, 0, 0), coor);
             GH_Convert.ToString(data, out str, GH_Conversion.Both);
-            if ((data as GH_ObjectWrapper) != null && (data as GH_ObjectWrapper).Value is Bitmap b)
+            try
             {
-                bmp = new DisplayBitmap(b);
-                str = null;
+                if (isBitmap)
+                {
+                    if (System.Web.MimeMapping.GetMimeMapping(str).StartsWith("image/"))
+                    {
+                        Bitmap b = new Bitmap(str);
+                        bmp = new DisplayBitmap(b);
+                    }
+                    else
+                    {
+                        isBitmap = false;
+                        Grasshopper.Instances.ActiveCanvas.Document.ScheduleSolution(5, InputChange);
+                        return;
+                    }
+                }
             }
-            if (str != null && Params.Count() == 2)
+            catch(Exception e)
             {
-                isBitmap = false;
-                foreach (var p in strParam)
-                    Params.RegisterInputParam(p);
-                Params.OnParametersChanged();
-                return;
-            }
-            else if (str == null && Params.Count() != 2)
-            {
-                Grasshopper.Instances.ActiveCanvas.Document.ScheduleSolution(5, Callback);
-                isBitmap = true;
-                return;
+                RhinoApp.WriteLine(e.Message);
             }
             if (!isBitmap)
             {
@@ -77,29 +106,14 @@ namespace Melanoplus
                 if (!DA.GetData(4, ref size)) size = 12;
             }
         }
-        private void Callback(GH_Document doc)
-        {
-            var clean = Params.Input.Where(p => strParam.Any(s => s.Name == p.Name)).ToArray();
-            foreach (var p in clean)
-            {
-                Params.UnregisterInputParameter(p, true);
-            }
-            Params.OnParametersChanged();
-        }
 
         Point3d coor;
         string str;
-        Color colour = Color.Black;
-        bool mid = false, isBitmap = false;
+        Color colour;
+        bool mid, isBitmap;
         Line arrow;
         DisplayBitmap bmp;
-        int size = 12;
-        readonly IGH_Param[] strParam = new IGH_Param[3]
-        {
-            new Param_Colour {Name = "colour", NickName = "c", Description = "Colour of displayed data [Optional]", Optional = true, Access = GH_ParamAccess.item  },
-            new Param_Boolean {Name = "centered", NickName = "m", Description = "Position as Mid-point [Optional]", Optional = true, Access = GH_ParamAccess.item },
-            new Param_Integer {Name = "size", NickName = "s", Description = "Size of text [Optional]", Optional = true, Access = GH_ParamAccess.item },
-        };
+        int size;
 
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {
@@ -107,12 +121,12 @@ namespace Melanoplus
             if (Locked || Hidden || (str == null && bmp == null)) return;
             var view = RhinoDoc.ActiveDoc.Views.ActiveView.Bounds;
             Point2d anchor = new Point2d(view.Width * coor.X, view.Height * coor.Y);
-            if (str != null)
-                args.Display.Draw2dText(str, colour, anchor, mid, size);
-            else if (bmp != null)
+            if (isBitmap)
                 args.Display.DrawBitmap(bmp, (int)anchor.X, (int)anchor.Y);
-
+            else if (str != null)
+                args.Display.Draw2dText(str, colour, anchor, mid, size);
         }
+
         public override BoundingBox ClippingBox => BoundingBox.Union(base.ClippingBox, arrow.BoundingBox);
         public override bool Write(GH_IWriter writer)
         {
@@ -124,7 +138,6 @@ namespace Melanoplus
             isBitmap = reader.GetBoolean("Bitmap");
             return base.Read(reader);
         }
-
         public bool CanInsertParameter(GH_ParameterSide side, int index) => false;
         public bool CanRemoveParameter(GH_ParameterSide side, int index) => false;
         public IGH_Param CreateParameter(GH_ParameterSide side, int index) => null;
