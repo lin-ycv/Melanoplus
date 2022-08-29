@@ -68,6 +68,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="src\ColorCanvas.cs" />
     <Compile Include="src\Recorder.cs" />
     <Compile Include="src\R_HUD.cs" />
     <Compile Include="src\CopyWires.cs" />
