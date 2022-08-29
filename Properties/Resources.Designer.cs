@@ -83,6 +83,16 @@ namespace Melanoplus.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DataHUD {
+            get {
+                object obj = ResourceManager.GetObject("DataHUD", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Label {
             get {
                 object obj = ResourceManager.GetObject("Label", resourceCulture);
@@ -116,6 +126,26 @@ namespace Melanoplus.Properties {
         internal static System.Drawing.Bitmap multiline {
             get {
                 object obj = ResourceManager.GetObject("multiline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap recordOFF {
+            get {
+                object obj = ResourceManager.GetObject("recordOFF", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap recordON {
+            get {
+                object obj = ResourceManager.GetObject("recordON", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -124,6 +124,9 @@
   <data name="Copy_Wire" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Copy_Wire.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DataHUD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DataHUD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Label" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Label.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,6 +138,12 @@
   </data>
   <data name="multiline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\multiline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="recordOFF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\recordOFF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="recordON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\recordON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SnippetBuilder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SnippetBuilder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

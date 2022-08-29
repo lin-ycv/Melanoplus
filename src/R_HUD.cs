@@ -18,13 +18,15 @@ namespace Melanoplus
 {
     public class R_HUD : GH_Component, IGH_VariableParameterComponent
     {
-        public R_HUD() : base("Rhino HUD", "HUD", "Displays gh data on the viewport", "Melanoplus", "Display") { }
+        protected override Bitmap Icon => Properties.Resources.DataHUD;
+        public R_HUD() : base("Rhino HUD", "HUD", "Displays gh data on the viewport", "Display", "Preview") { }
+        public override GH_Exposure Exposure => GH_Exposure.quarternary | GH_Exposure.obscure;
         public override Guid ComponentGuid => new Guid("{95390F76-AA4C-46D1-9D35-E605C4758835}");
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Position", "XY", "Position of HUD on the viewport [0-1]", GH_ParamAccess.item);
-            pManager[0].Optional = true;
             pManager.AddGenericParameter("Data", "D", "Data to be displayed", GH_ParamAccess.item);
+            pManager[0].Optional = true;
+            pManager.AddPointParameter("position", "p", "Position of HUD on the viewport [0-1]", GH_ParamAccess.item, new Point3d(0.1, 0.9, 0));
             pManager[1].Optional = true;
             foreach (var p in strParam)
                 Params.RegisterInputParam(p);
@@ -69,9 +71,9 @@ namespace Melanoplus
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             if (bmp != null) bmp.Dispose();
-            if (!DA.GetData(0, ref coor)) return;
+            if (!DA.GetData("position", ref coor)) return;
             object data = new object();
-            if (!DA.GetData(1, ref data)) { str = null; bmp = null; return; }
+            if (!DA.GetData("Data", ref data)) { str = null; bmp = null; return; }
             if (coor.X > 1) coor.X = 1;
             else if (coor.X < 0) coor.X = 0;
             if (coor.Y > 1) coor.Y = 1;

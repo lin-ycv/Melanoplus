@@ -15,15 +15,15 @@ namespace Melanoplus
         public GroupName()
           : base("Multiline Name", "GroupName",
               "Adds multiline name to selected group(s)",
-              "Melanoplus", "Utility")
+              "Params", "Util")
         { }
         public override Guid ComponentGuid => new Guid("AC5E4059-5037-47B5-B59B-049ED083D6C6");
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.primary | GH_Exposure.obscure;
         protected override Bitmap Icon => Properties.Resources.multiline;
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "Name", "Name for group", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Rename", "Rename", "Set true to rename selected group(s)", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", null, "Name for group", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Set", null, "Set true to rename selected group(s)", GH_ParamAccess.item);
         }
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
