@@ -1,5 +1,4 @@
-﻿using Eto.Forms;
-using Grasshopper;
+﻿using Grasshopper;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Base;
 using Grasshopper.GUI.Canvas;

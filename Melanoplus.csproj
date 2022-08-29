@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyPriority.cs" />
+    <Compile Include="src\Recorder.cs" />
     <Compile Include="src\R_HUD.cs" />
     <Compile Include="src\CopyWires.cs" />
     <Compile Include="src\GroupName.cs" />
