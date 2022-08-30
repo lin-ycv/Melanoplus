@@ -19,7 +19,7 @@ namespace Melanoplus
     {
         public string Category => "Palette";
 
-        public string Name => "Canvas";
+        public string Name => "Canvas Colours";
 
         public IEnumerable<string> Keywords => new string[1] { "Background" };
 
@@ -28,57 +28,198 @@ namespace Melanoplus
 
         public class GH_ColorCanvasSettinFrontEnd : UserControl
         {
+            private TableLayoutPanel tableLayoutPanel;
             private IContainer components;
             private GH_ColourSwatchControl swatchGrid, swatchBack, swatchEdge, swatchShade, swatchMono;
+            private Label labelBack, labelEdge, labelShade, labelGrid, labelMono, checkLabel;
             private ToolTip ToolTip;
+            private CheckBox checkMono;
+            private Button reset;
             public GH_ColorCanvasSettinFrontEnd()
             {
+                tableLayoutPanel = new TableLayoutPanel()
+                {
+                    Dock = DockStyle.Left | DockStyle.Top,
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                    ColumnCount = 6,
+                    RowCount = 3,
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                };
+                tableLayoutPanel.CellPaint += tableLayoutPanel_CellPaint;
                 components = new Container();
                 ToolTip = new ToolTip(components);
-                swatchBack = new GH_ColourSwatchControl() 
-                {
-                    AllowDrop = true,
-                    Colour = GH_Skin.canvas_back,
-                    Location = new Point(0, 0),
-                    Name = "swatchBack",
-                    Size = new Size(20, 20),
-                    TabIndex = 0,
-                };
-                swatchBack.ColourChanged += (s, e) => { GH_Skin.canvas_back = swatchBack.Colour; Instances.ActiveCanvas.Refresh(); };
                 swatchEdge = new GH_ColourSwatchControl()
                 {
-                    //AllowDrop = true,
                     Colour = GH_Skin.canvas_edge,
-                    Location = new Point(19, 0),
-                    Name = "swatchEdge",
                     Size = new Size(20, 20),
-                    //TabIndex = 1,
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
                 };
+                swatchEdge.ColourChanged += (s, e) => { GH_Skin.canvas_edge = swatchEdge.Colour; Instances.ActiveCanvas.Refresh(); };
+                labelEdge = new Label()
+                {
+                    Text = "Edge\t\t",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 50, 0),
+                };
+                swatchBack = new GH_ColourSwatchControl()
+                {
+                    Colour = GH_Skin.canvas_back,
+                    Size = new Size(20, 20),
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                };
+                swatchBack.ColourChanged += (s, e) => { GH_Skin.canvas_back = swatchBack.Colour; Instances.ActiveCanvas.Refresh(); };
+                labelBack = new Label()
+                {
+                    Text = "Fill",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 50, 0),
+                };
+                swatchShade = new GH_ColourSwatchControl()
+                {
+                    Colour = GH_Skin.canvas_shade,
+                    Size = new Size(20, 20),
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                };
+                swatchShade.ColourChanged += (s, e) => { GH_Skin.canvas_shade = swatchShade.Colour; Instances.ActiveCanvas.Refresh(); };
+                labelShade = new Label()
+                {
+                    Text = "Shade",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 50, 0),
+                };
+                swatchGrid = new GH_ColourSwatchControl()
+                {
+                    Colour = GH_Skin.canvas_grid,
+                    Size = new Size(20, 20),
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                };
+                swatchGrid.ColourChanged += (s, e) => { GH_Skin.canvas_grid = swatchGrid.Colour; Instances.ActiveCanvas.Refresh(); };
+                labelGrid = new Label()
+                {
+                    Text = "Grid",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 50, 0),
+                };
+                checkMono = new CheckBox()
+                {
+                    Dock = DockStyle.Fill,
+                    Padding = new Padding(0),
+                    AutoSize = true,
+                    Margin = new Padding(0),
+                    Checked = GH_Skin.canvas_mono,
+                    Size = new Size(20, 20),
+                };
+                checkMono.CheckedChanged += (s, e) => { GH_Skin.canvas_mono = checkMono.Checked; Instances.ActiveCanvas.Refresh(); };
+                checkLabel = new Label()
+                {
+                    Text = "Mono",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 50, 0),
+                };
+                swatchMono = new GH_ColourSwatchControl()
+                {
+                    Colour = GH_Skin.canvas_mono_color,
+                    Size = new Size(20, 20),
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                };
+                swatchMono.ColourChanged += (s, e) => { GH_Skin.canvas_mono_color = swatchMono.Colour; Instances.ActiveCanvas.Refresh(); };
+                labelMono = new Label()
+                {
+                    Text = "Colour",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 50, 0),
+                };
+                reset = new Button()
+                {
+                    Text = "Reset to Default values",
+                    Height = 20,
+                    FlatStyle = FlatStyle.Flat,
+                    Margin = new Padding(0,12,0,12),
+                    Padding = new Padding(0),
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowOnly,
+                    //Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                };
+                reset.Click += (s, e) =>
+                {
+                    swatchGrid.Colour = Color.FromArgb(30, 0, 0, 0);
+                    swatchBack.Colour = Color.FromArgb(255, 212, 208, 200);
+                    swatchEdge.Colour = Color.FromArgb(255, 0, 0, 0);
+                    swatchShade.Colour = Color.FromArgb(80, 0, 0, 0);
+                    swatchMono.Colour = Color.FromArgb(255, 255, 255, 255);
+                    checkMono.Checked = false;
+                    //GH_Skin.canvas_mono = false;
+                    GH_Skin.canvas_shade_size = 30;
+                    GH_Skin.canvas_grid_col = 150;
+                    GH_Skin.canvas_grid_row = 50;
+                    Instances.ActiveCanvas.Refresh();
+                };
+
+                tableLayoutPanel.SuspendLayout();
                 SuspendLayout();
                 ToolTip.SetToolTip(swatchBack, "Set the colour used to draw Background");
                 ToolTip.SetToolTip(swatchEdge, "Set the colour used to draw Edges");
+
+                tableLayoutPanel.Controls.Add(swatchEdge, 0, 0);
+                tableLayoutPanel.Controls.Add(labelEdge, 1, 0);
+                tableLayoutPanel.Controls.Add(swatchBack, 0, 1);
+                tableLayoutPanel.Controls.Add(labelBack, 1, 1);
+                tableLayoutPanel.Controls.Add(swatchShade, 2, 0);
+                tableLayoutPanel.Controls.Add(labelShade, 3, 0);
+                tableLayoutPanel.Controls.Add(swatchGrid, 2, 1);
+                tableLayoutPanel.Controls.Add(labelGrid, 3, 1);
+                tableLayoutPanel.Controls.Add(checkMono, 4, 0);
+                tableLayoutPanel.Controls.Add(checkLabel, 5, 0);
+                tableLayoutPanel.Controls.Add(swatchMono, 4, 1);
+                tableLayoutPanel.Controls.Add(labelMono, 5, 1);
+                tableLayoutPanel.Controls.Add(reset, 2, 2);
+                tableLayoutPanel.SetColumnSpan(reset, 4);
+
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.RowStyles.Add(new RowStyle());
+                tableLayoutPanel.RowStyles.Add(new RowStyle());
                 base.AutoScaleDimensions = new SizeF(6f, 13f);
                 base.AutoScaleMode = AutoScaleMode.Font;
-                base.Controls.Add(swatchBack);
-                base.Controls.Add(swatchEdge);
-                base.Name = "GH_GenericCapsulePaletteSettings";
-                base.Size = new Size(293, 58);
+                base.AutoSize = true;
+                base.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                base.Controls.Add(tableLayoutPanel);
+                base.Size = new Size(293, 90);
+                tableLayoutPanel.ResumeLayout(false);
+                tableLayoutPanel.PerformLayout();
                 ResumeLayout(false);
             }
-
-                //GH_ColourPicker
-
-                //Defaults
-                //GH_Skin.canvas_grid = Color.FromArgb(30, 0, 0, 0);
-                //GH_Skin.canvas_back = Color.FromArgb(255, 212, 208, 200);
-                //GH_Skin.canvas_edge = Color.FromArgb(255, 0, 0, 0);
-                //GH_Skin.canvas_shade = Color.FromArgb(80, 0, 0, 0);
-                //GH_Skin.canvas_grid_col = 150;
-                //GH_Skin.canvas_grid_row = 50;
-                //GH_Skin.canvas_mono = false;
-                //GH_Skin.canvas_mono_color = Color.FromArgb(255, 255, 255, 255);
-                //GH_Skin.canvas_shade_size = 30;
+            void tableLayoutPanel_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
+            {
+                if (e.Column == 4 && e.Row == 0)
+                {
+                    e.Graphics.FillRectangle(Brushes.Gray, e.CellBounds);
+                }
+            }
         }
-    
+
     }
 }
