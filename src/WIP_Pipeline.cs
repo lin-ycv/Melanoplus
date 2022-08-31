@@ -15,7 +15,7 @@ namespace Melanoplus
     public class WIP_Pipeline : GH_Component
     {
         public WIP_Pipeline() : base("Pipeline", "Get", "Pipeline to get objects from Rhino", "Params", "Input") { }
-        public override GH_Exposure Exposure => GH_Exposure.quarternary | GH_Exposure.obscure;
+        public override GH_Exposure Exposure => GH_Exposure.hidden; //GH_Exposure.quarternary | GH_Exposure.obscure;
         public override Guid ComponentGuid => new Guid("{0E750FE4-C32B-4411-B9C3-A2AAEC7CF1A1}");
         public override void AddedToDocument(GH_Document document)
         {
