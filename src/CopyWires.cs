@@ -27,7 +27,7 @@ namespace Melanoplus
             set
             {
                 enabled = value;
-                Handler(value);
+                Handler(Instances.ActiveCanvas, value);
                 GH_SettingsServer settings = new GH_SettingsServer("grasshopper_kernel", true);
                 settings.SetValue("Widget.Melanoplus.cWires", enabled);
                 settings.WritePersistentSettings();
@@ -46,14 +46,14 @@ namespace Melanoplus
 
         internal static void CanvasCreated(GH_Canvas canvas)
         {
-            Instances.CanvasCreated -= CanvasCreated;
-            Handler(enabled);
+            //Instances.CanvasCreated -= CanvasCreated;
+            Handler(canvas, enabled);
         }
-        private static void Handler(bool value)
+        private static void Handler(GH_Canvas canvas, bool value)
         {
-            Instances.ActiveCanvas.KeyDown -= ObjLMB;
+            canvas.KeyDown -= ObjLMB;
             if (value)
-                Instances.ActiveCanvas.KeyDown += ObjLMB;
+                canvas.KeyDown += ObjLMB;
         }
         private static void ObjLMB(object sender, KeyEventArgs e)
         {

@@ -16,46 +16,41 @@ namespace Melanoplus
 {
     public class AssemblyPriority : GH_AssemblyPriority
     {
+        private static List<ToolStripMenuItem> MenuEntryAllowShortcut = new List<ToolStripMenuItem>() { };
         public override GH_LoadingInstruction PriorityLoad()
         {
-            GH_Canvas.WidgetListCreated += new GH_Canvas.WidgetListCreatedEventHandler(AddWidget);
+            GH_Canvas.WidgetListCreated += AddWidget;
             Instances.CanvasCreated += LoadQuickButtons;
             Instances.CanvasCreated += LoadMenuOptions;
-            Instances.CanvasCreated += LabelWidget.CanvasCreated;
-            Instances.CanvasCreated += WiresWidget.CanvasCreated;
             GH_DocumentEditor.AggregateShortcutMenuItems += AggregateShortcutMenuItems;
-            var server = Instances.ComponentServer;
+            /*var server = Instances.ComponentServer;
             server.AddCategoryShortName("Melanoplus", "Plus");
             server.AddCategorySymbolName("Melanoplus", '➕');
-            server.AddCategoryIcon("Melanoplus", Properties.Resources.MelanoplusSimple16);
+            server.AddCategoryIcon("Melanoplus", Properties.Resources.MelanoplusSimple16);*/
             return GH_LoadingInstruction.Proceed;
         }
 
         private void AddWidget(object s, GH_CanvasWidgetListEventArgs e)
         {
+            GH_Canvas.WidgetListCreated -= AddWidget;
+            var c = (GH_Canvas)s;            
             e.AddWidget(new LabelWidget());
+            LabelWidget.CanvasCreated(c);
             e.AddWidget(new WiresWidget());
+            WiresWidget.CanvasCreated(c);
         }
 
         private void LoadQuickButtons(GH_Canvas canvas)
         {
             Instances.CanvasCreated -= LoadQuickButtons;
-            var editor = Instances.DocumentEditor;
-            ((ToolStrip)editor.Controls[0].Controls[1]).Items.AddRange(QuickButtons);
+            ToolStripItemCollection items = ((ToolStrip)(Instances.DocumentEditor).Controls[0].Controls[1]).Items;
+            items.Add(new ToolStripButton("Create Snippet", Properties.Resources.SnippetBuilder, (s, e) => Snippet.Save(canvas.Document))
+            {
+                Name = "Melanoplus_Snippet",
+                DisplayStyle = ToolStripItemDisplayStyle.Image,
+            });
         }
-        private ToolStripItem[] QuickButtons
-        {
-            get {
-                List<ToolStripItem> buttons = new List<ToolStripItem>(){
-                    new ToolStripButton("Create Snippet", Properties.Resources.SnippetBuilder, (s,e) => Snippet.Save(Instances.ActiveCanvas.Document)){
-                        Name = "Melanoplus_Snippet",
-                        DisplayStyle = ToolStripItemDisplayStyle.Image,
-                    },
-                };
-                return buttons.ToArray();
-            }
-        }
-        internal static List<ToolStripMenuItem> MenuEntryAllowShortcut = new List<ToolStripMenuItem>() { };
+        
         private void LoadMenuOptions(GH_Canvas canvas)
         {
             Instances.CanvasCreated -= LoadMenuOptions;
@@ -81,9 +76,9 @@ namespace Melanoplus
                 mnu.DropDownOpening += (s, e) => mnu.DropDownItems["mnuUnlockCluster"].Visible = canvas.IsDocument && canvas.Document.SelectedObjects().Any(o => o is GH_Cluster);
             }
         }
-        
         private static void AggregateShortcutMenuItems(object sender, GH_MenuShortcutEventArgs e)
         {
+            GH_DocumentEditor.AggregateShortcutMenuItems -= AggregateShortcutMenuItems;
             MenuEntryAllowShortcut.ForEach(e.AppendItem);
         }
     }

@@ -30,7 +30,7 @@ namespace Melanoplus
             get => enabled;
             set
             {
-                Handler(value);
+                Handler(Instances.ActiveCanvas, value);
                 enabled = value;
                 GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
                 settings.SetValue("Enabled", enabled);
@@ -68,15 +68,14 @@ namespace Melanoplus
 
         internal static void CanvasCreated(GH_Canvas canvas)
         {
-            Instances.CanvasCreated -= CanvasCreated;
-            Handler(enabled);
+            Handler(canvas, enabled);
         }
-        private static void Handler(bool value)
+        private static void Handler(GH_Canvas canvas, bool value)
         {
-            Instances.ActiveCanvas.CanvasPrePaintObjects -= Label;
+            canvas.CanvasPrePaintObjects -= Label;
             if (value == true)
             {
-                Instances.ActiveCanvas.CanvasPrePaintObjects += Label;
+                canvas.CanvasPrePaintObjects += Label;
             }
         }
         private static void Label(GH_Canvas canvas)
