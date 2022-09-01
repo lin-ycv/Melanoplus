@@ -21,6 +21,8 @@ namespace Melanoplus
             GH_Canvas.WidgetListCreated += new GH_Canvas.WidgetListCreatedEventHandler(AddWidget);
             Instances.CanvasCreated += LoadQuickButtons;
             Instances.CanvasCreated += LoadMenuOptions;
+            Instances.CanvasCreated += LabelWidget.CanvasCreated;
+            Instances.CanvasCreated += WiresWidget.CanvasCreated;
             GH_DocumentEditor.AggregateShortcutMenuItems += AggregateShortcutMenuItems;
             var server = Instances.ComponentServer;
             server.AddCategoryShortName("Melanoplus", "Plus");

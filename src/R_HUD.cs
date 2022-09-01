@@ -18,10 +18,27 @@ namespace Melanoplus
 {
     public class R_HUD : GH_Component, IGH_VariableParameterComponent
     {
-        protected override Bitmap Icon => Properties.Resources.DataHUD;
-        public R_HUD() : base("Rhino HUD", "HUD", "Displays gh data on the viewport", "Display", "Preview") { }
-        public override GH_Exposure Exposure => GH_Exposure.quarternary | GH_Exposure.obscure;
         public override Guid ComponentGuid => new Guid("{95390F76-AA4C-46D1-9D35-E605C4758835}");
+        protected override Bitmap Icon => Properties.Resources.DataHUD;
+        public override GH_Exposure Exposure => GH_Exposure.quarternary | GH_Exposure.obscure;
+        public override BoundingBox ClippingBox => BoundingBox.Union(base.ClippingBox, arrow.BoundingBox);
+
+        private Point3d coor;
+        private string str;
+        private Color colour;
+        private bool mid, isBitmap;
+        private Line arrow;
+        private DisplayBitmap bmp;
+        private int size;
+        private readonly IGH_Param[] strParam = new IGH_Param[3]
+        {
+            new Param_Colour {Name = "colour", NickName = "c", Description = "Colour of displayed data [Optional]", Optional = true, Access = GH_ParamAccess.item  },
+            new Param_Boolean {Name = "centered", NickName = "m", Description = "Position as Mid-point [Optional]", Optional = true, Access = GH_ParamAccess.item },
+            new Param_Integer {Name = "size", NickName = "s", Description = "Size of text [Optional]", Optional = true, Access = GH_ParamAccess.item },
+        };
+        public R_HUD() : base("Rhino HUD", "HUD", 
+            "Displays gh data on the viewport", 
+            "Display", "Preview") { }
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Data", "D", "Data to be displayed", GH_ParamAccess.item);
@@ -30,40 +47,6 @@ namespace Melanoplus
             pManager[1].Optional = true;
             foreach (var p in strParam)
                 Params.RegisterInputParam(p);
-        }
-        readonly IGH_Param[] strParam = new IGH_Param[3]
-        {
-            new Param_Colour {Name = "colour", NickName = "c", Description = "Colour of displayed data [Optional]", Optional = true, Access = GH_ParamAccess.item  },
-            new Param_Boolean {Name = "centered", NickName = "m", Description = "Position as Mid-point [Optional]", Optional = true, Access = GH_ParamAccess.item },
-            new Param_Integer {Name = "size", NickName = "s", Description = "Size of text [Optional]", Optional = true, Access = GH_ParamAccess.item },
-        };
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendItem(menu, "Display Bitmap", Handler, true, isBitmap);
-        }
-        private void Handler(object sender, EventArgs e)
-        {
-            isBitmap = !isBitmap;
-            InputChange(null);
-        }
-        private void InputChange(GH_Document doc)
-        {
-            if (isBitmap)
-                for (int i = 4; i > 1; i--)
-                {
-                    Params.UnregisterInputParameter(Params.Input[i], true);
-                }
-            else
-                foreach (var p in strParam)
-                    Params.RegisterInputParam(p);
-            Params.OnParametersChanged();
-            ExpireSolution(true);
-        }
-        public override void AddedToDocument(GH_Document document)
-        {
-            base.AddedToDocument(document);
-            if (isBitmap)
-                InputChange(null);
         }
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
@@ -108,15 +91,6 @@ namespace Melanoplus
                 if (!DA.GetData(4, ref size)) size = 12;
             }
         }
-
-        Point3d coor;
-        string str;
-        Color colour;
-        bool mid, isBitmap;
-        Line arrow;
-        DisplayBitmap bmp;
-        int size;
-
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {
             base.DrawViewportMeshes(args);
@@ -129,7 +103,35 @@ namespace Melanoplus
                 args.Display.Draw2dText(str, colour, anchor, mid, size);
         }
 
-        public override BoundingBox ClippingBox => BoundingBox.Union(base.ClippingBox, arrow.BoundingBox);
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Display Bitmap", Handler, true, isBitmap);
+        }
+        public override void AddedToDocument(GH_Document document)
+        {
+            base.AddedToDocument(document);
+            if (isBitmap)
+                InputChange(null);
+        }
+        private void Handler(object sender, EventArgs e)
+        {
+            isBitmap = !isBitmap;
+            InputChange(null);
+        }
+        private void InputChange(GH_Document doc)
+        {
+            if (isBitmap)
+                for (int i = 4; i > 1; i--)
+                {
+                    Params.UnregisterInputParameter(Params.Input[i], true);
+                }
+            else
+                foreach (var p in strParam)
+                    Params.RegisterInputParam(p);
+            Params.OnParametersChanged();
+            ExpireSolution(true);
+        }
+
         public override bool Write(GH_IWriter writer)
         {
             writer.SetBoolean("Bitmap", isBitmap);

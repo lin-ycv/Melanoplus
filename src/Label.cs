@@ -22,24 +22,25 @@ namespace Melanoplus
 {
     public class LabelWidget : GH_Widget
     {
-        public override string Name
+        public override string Name { get => "Label"; }
+        public override string Description { get => "Display names above components"; }
+        public override Bitmap Icon_24x24 { get => Properties.Resources.Label; }
+        public override bool Visible
         {
-            get { return "Label"; }
-        }
-        public override string Description
-        {
-            get { return "Display names above components"; }
-        }
-        public override Bitmap Icon_24x24
-        {
-            get
+            get => enabled;
+            set
             {
-                return Properties.Resources.Label;
+                Handler(value);
+                enabled = value;
+                GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
+                settings.SetValue("Enabled", enabled);
+                settings.WritePersistentSettings();
             }
         }
+
         internal static Font font = GH_FontServer.StandardItalic;
-        public static List<string> Exclude = new List<string>();
-        private bool enabled = false;
+        internal static List<string> Exclude = new List<string>();
+        private static bool enabled = false;
 
         public LabelWidget()
         {
@@ -60,51 +61,25 @@ namespace Melanoplus
                 settings.WritePersistentSettings();
                 Exclude = new List<string>(Exclude_defaults.Split(','));
             }
-            Instances.CanvasCreated += CanvasCreated;
         }
 
-        private void CanvasCreated(GH_Canvas canvas)
+        public override bool Contains(Point pt_control, PointF pt_canvas) => false;
+        public override void Render(GH_Canvas Canvas) { }
+
+        internal static void CanvasCreated(GH_Canvas canvas)
         {
-            Instances.ActiveCanvas.DocumentChanged += DocumentChanged;
-        }
-        private void DocumentChanged(GH_Canvas canvas, GH_CanvasDocumentChangedEventArgs e)
-        {
+            Instances.CanvasCreated -= CanvasCreated;
             Handler(enabled);
         }
-
-        public override bool Visible
-        {
-            get { return enabled; }
-            set
-            {
-                Handler(value);
-                enabled = value;
-                GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
-                settings.SetValue("Enabled", enabled);
-                settings.WritePersistentSettings();
-            }
-        }
-        private void Handler(bool value)
+        private static void Handler(bool value)
         {
             Instances.ActiveCanvas.CanvasPrePaintObjects -= Label;
             if (value == true)
             {
                 Instances.ActiveCanvas.CanvasPrePaintObjects += Label;
             }
-
         }
-
-        public override bool Contains(Point pt_control, PointF pt_canvas)
-        {
-            return false;
-        }
-
-        public override void Render(GH_Canvas Canvas)
-        {
-            return;
-        }
-
-        static void Label(GH_Canvas canvas)
+        private static void Label(GH_Canvas canvas)
         {
             if (!canvas.IsDocument || (GH_Canvas.ZoomFadeLow == 0))
                 return;
@@ -161,6 +136,7 @@ namespace Melanoplus
         }
 
     }
+
     public class GH_LabelSettingsUI : IGH_SettingFrontend
     {
         public string Category => "Widgets";
@@ -169,27 +145,18 @@ namespace Melanoplus
         {
             "Font",
             "Exclusion",
-        }; 
+        };
 
-        public System.Windows.Forms.Control SettingsUI()
+        public Control SettingsUI()
         {
             return new GH_LabelSettingFrontEnd();
-        }
-
-        System.Windows.Forms.Control IGH_SettingFrontend.SettingsUI()
-        {
-            return this.SettingsUI();
         }
         public class GH_LabelSettingFrontEnd : UserControl
         {
             private GH_FontControl fontpicker;
-            private System.Windows.Forms.TextBox input;
+            private TextBox input;
             private TableLayoutPanel tableLayoutPanel;
             public GH_LabelSettingFrontEnd()
-            {
-                InitializeComponent();
-            }
-            private void InitializeComponent()
             {
                 tableLayoutPanel = new TableLayoutPanel
                 {
@@ -207,7 +174,6 @@ namespace Melanoplus
                     Size = new Size(553, 75),
                     BorderStyle = BorderStyle.None,
                     Dock = DockStyle.Fill,
-                    TabIndex = 0,
                 };
                 fontpicker.FontChanged += (s, e) =>
                 {
@@ -218,14 +184,13 @@ namespace Melanoplus
                     settings.WritePersistentSettings();
                 };
 
-                input = new System.Windows.Forms.TextBox()
+                input = new TextBox()
                 {
-                    Location = new Point(3,80),
                     Text = string.Join(",", LabelWidget.Exclude),
                     Name = "textBox1",
-                    Size = new Size(553, 20),
+                    Size = new Size(553, 5),
                     Dock = DockStyle.Fill,
-                    TabIndex = 1,
+                    Margin = new Padding(0, 6, 0, 6),
                 };
                 input.TextChanged += (s, e) =>
                 {
@@ -238,14 +203,12 @@ namespace Melanoplus
                 tableLayoutPanel.SuspendLayout();
                 SuspendLayout();
 
-
-                tableLayoutPanel.Controls.Add(fontpicker);
-                tableLayoutPanel.Controls.Add(input);
+                tableLayoutPanel.Controls.Add(fontpicker, 0, 0);
+                tableLayoutPanel.Controls.Add(input, 0, 1);
 
                 tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
                 tableLayoutPanel.RowStyles.Add(new RowStyle());
                 tableLayoutPanel.RowStyles.Add(new RowStyle());
-
 
                 this.AutoScaleDimensions = new SizeF(6f, 13f);
                 this.AutoScaleMode = AutoScaleMode.Font;
@@ -253,12 +216,10 @@ namespace Melanoplus
                 this.Controls.Add(tableLayoutPanel);
                 this.Margin = new Padding(12, 12, 12, 12);
 
-                tableLayoutPanel.ResumeLayout(false);
-                tableLayoutPanel.PerformLayout();
+                tableLayoutPanel.ResumeLayout(true);
                 this.ResumeLayout(false);
-
             }
-            
+
         }
     }
 

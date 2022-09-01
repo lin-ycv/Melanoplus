@@ -12,14 +12,13 @@ namespace Melanoplus
 {
     public class GroupName : GH_Component
     {
-        public GroupName()
-          : base("Multiline Name", "GroupName",
-              "Adds multiline name to selected group(s)",
-              "Params", "Util")
-        { }
         public override Guid ComponentGuid => new Guid("AC5E4059-5037-47B5-B59B-049ED083D6C6");
         public override GH_Exposure Exposure => GH_Exposure.primary | GH_Exposure.obscure;
         protected override Bitmap Icon => Properties.Resources.multiline;
+
+        public GroupName() : base ("Multiline Name", "GroupName",
+              "Adds multiline name to selected group(s)",
+              "Params", "Util"){ }
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", null, "Name for group", GH_ParamAccess.item);
@@ -47,7 +46,7 @@ namespace Melanoplus
         public override void AddedToDocument(GH_Document document)
         {
             base.AddedToDocument(document);
-            if (this.Params.Input[1].SourceCount==0)
+            if (this.Params.Input[1].SourceCount == 0)
             {
                 var panel = new GH_Panel();
                 panel.CreateAttributes();

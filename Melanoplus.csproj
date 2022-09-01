@@ -68,6 +68,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="src\WIP_Choke.cs" />
     <Compile Include="src\WIP_Viewport.cs" />
     <Compile Include="src\WIP_Pipeline.cs" />
     <Compile Include="src\ColorCanvas.cs" />

@@ -18,7 +18,9 @@ namespace Melanoplus
 {
     public class WiresWidget : GH_Widget
     {
-        private bool enabled = false;
+        public override string Name => "Copy Wires";
+        public override string Description => "Copy all wires from one component to another.";
+        public override Bitmap Icon_24x24 => Properties.Resources.Copy_Wire;
         public override bool Visible
         {
             get => enabled;
@@ -31,7 +33,29 @@ namespace Melanoplus
                 settings.WritePersistentSettings();
             }
         }
-        private void ObjLMB(object sender, KeyEventArgs e)
+
+        private static bool enabled = false;
+
+        public WiresWidget()
+        {
+            GH_SettingsServer settings = new GH_SettingsServer("grasshopper_kernel", true);
+            enabled = settings.GetValue("Widget.Melanoplus.cWires", false);
+        }
+        public override bool Contains(Point pt_control, PointF pt_canvas) => false;
+        public override void Render(GH_Canvas Canvas) { }
+
+        internal static void CanvasCreated(GH_Canvas canvas)
+        {
+            Instances.CanvasCreated -= CanvasCreated;
+            Handler(enabled);
+        }
+        private static void Handler(bool value)
+        {
+            Instances.ActiveCanvas.KeyDown -= ObjLMB;
+            if (value)
+                Instances.ActiveCanvas.KeyDown += ObjLMB;
+        }
+        private static void ObjLMB(object sender, KeyEventArgs e)
         {
             if (sender is GH_Canvas canvas
                 && canvas.ActiveInteraction is GH_RewireInteraction
@@ -56,50 +80,12 @@ namespace Melanoplus
                 }
             }
         }
-        public override string Name => "Copy Wires";
-
-        public override string Description => "Copy all wires from one component to another.";
-
-        public override Bitmap Icon_24x24 => Properties.Resources.Copy_Wire;
-
-        public WiresWidget()
-        {
-            GH_SettingsServer settings = new GH_SettingsServer("grasshopper_kernel", true);
-            enabled = settings.GetValue("Widget.Melanoplus.cWires", false);
-            if (enabled)
-                Instances.CanvasCreated += CanvasCreated;
-        }
-        private void CanvasCreated(GH_Canvas canvas)
-        {
-            Instances.ActiveCanvas.DocumentChanged += DocumentChanged;
-        }
-        private void DocumentChanged(GH_Canvas canvas, GH_CanvasDocumentChangedEventArgs e)
-        {
-            Handler(enabled);
-        }
-        private void Handler(bool value)
-        {
-            Instances.ActiveCanvas.KeyDown -= ObjLMB;
-            if (value)
-                Instances.ActiveCanvas.KeyDown += ObjLMB;
-        }
-
-        public override bool Contains(Point pt_control, PointF pt_canvas)
-        {
-            return false;
-        }
-        public override void Render(GH_Canvas Canvas)
-        {
-            return;
-        }
-
     }
+
     public class GH_cWireSettingsUI : IGH_SettingFrontend
     {
         public string Category => "Widgets";
-
         public string Name => "Copy Wires";
-
         public IEnumerable<string> Keywords => new string[1]
         {
             "Instructions",
