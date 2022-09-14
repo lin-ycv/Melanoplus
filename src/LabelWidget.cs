@@ -41,6 +41,9 @@ namespace Melanoplus
         internal static Font font = GH_FontServer.StandardItalic;
         internal static List<string> Exclude = new List<string>();
         private static bool enabled = false;
+        internal static SolidBrush brush = (SolidBrush)Brushes.Gray;
+        readonly private static StringFormat alignment = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far };
+        internal static bool shownickname = false;
 
         public LabelWidget()
         {
@@ -51,10 +54,12 @@ namespace Melanoplus
                 enabled = settings.GetValue("Enabled", false);
                 Exclude = new List<string>(settings.GetValue("Exclude", "").Split(','));
                 font = (settings.GetValue("Font", "") is string str) ? cvt.ConvertFromInvariantString(str) as Font : GH_FontServer.StandardItalic;
+                brush.Color = settings.GetValue("Color", Color.Gray);
+                shownickname = settings.GetValue("Nickname", false);
             }
             else
             {
-                string Exclude_defaults = "Scribble,Panel,Value List,Button,Boolean Toggle,Number Slider,Sketch";
+                string Exclude_defaults = "Colour Swatch,Scribble,Panel,Value List,Button,Boolean Toggle,Number Slider,Sketch";
                 settings.SetValue("Enabled", enabled);
                 settings.SetValue("Exclude", Exclude_defaults);
                 settings.SetValue("Font", cvt.ConvertToInvariantString(font));
@@ -100,6 +105,10 @@ namespace Melanoplus
 
                 if (comp.ToString() == "Grasshopper.Kernel.Components.GH_PlaceholderComponent")
                     name = comp.Name;
+                else if (shownickname)
+                {
+                    name = comp.NickName == string.Empty ? Instances.ComponentServer.EmitObjectProxy(comp.ComponentGuid).Desc.NickName : comp.NickName;
+                }
                 else
                     name = ((comp.NickName == Instances.ComponentServer.EmitObjectProxy(comp.ComponentGuid).Desc.NickName) || comp.NickName == string.Empty) ?
                                     comp.Name : comp.NickName;
@@ -124,13 +133,10 @@ namespace Melanoplus
                     name = sb.ToString();
                 }
 
-                using (StringFormat alignment = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far })
-                {
-                    canvas.Graphics.DrawString(
-                        name,
-                        font, Brushes.Gray,
-                        x, y, alignment);
-                }
+                canvas.Graphics.DrawString(
+                    name,
+                    font, brush,
+                    x, y, alignment);
             }
         }
 
@@ -140,10 +146,9 @@ namespace Melanoplus
     {
         public string Category => "Widgets";
         public string Name => "Label";
-        public IEnumerable<string> Keywords => new string[2]
+        public IEnumerable<string> Keywords => new string[]
         {
             "Font",
-            "Exclusion",
         };
 
         public Control SettingsUI()
@@ -155,6 +160,9 @@ namespace Melanoplus
             private GH_FontControl fontpicker;
             private TextBox input;
             private TableLayoutPanel tableLayoutPanel;
+            private GH_ColourSwatchControl colour;
+            private Label colourLabel, nickLabel;
+            private CheckBox nickCheck;
             public GH_LabelSettingFrontEnd()
             {
                 tableLayoutPanel = new TableLayoutPanel
@@ -162,10 +170,58 @@ namespace Melanoplus
                     Dock = DockStyle.Fill,
                     Margin = new Padding(12, 12, 12, 12),
                     Size = new Size(553, 5),
-                    ColumnCount = 1,
+                    ColumnCount = 4,
                     RowCount = 2,
                 };
 
+                colour = new GH_ColourSwatchControl()
+                {
+                    Colour = LabelWidget.brush.Color,
+                    Size = new Size(20, 20),
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                };
+                colour.ColourChanged += (s, e) =>
+                {
+                    LabelWidget.brush.Color = colour.Colour;
+                    Instances.ActiveCanvas.Refresh();
+                    GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
+                    settings.SetValue("Colour", colour.Colour);
+                    settings.WritePersistentSettings();
+                };
+                colourLabel = new Label()
+                {
+                    Text = "Label Colour",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 40, 0),
+                };
+                nickCheck = new CheckBox()
+                {
+                    Dock = DockStyle.Fill,
+                    Padding = new Padding(0),
+                    AutoSize = true,
+                    Margin = new Padding(0),
+                    Checked = LabelWidget.shownickname,
+                    Size = new Size(20, 20),
+                };
+                nickCheck.CheckedChanged += (s, e) =>
+                {
+                    LabelWidget.shownickname = nickCheck.Checked;
+                    Instances.ActiveCanvas.Refresh();
+                    GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
+                    settings.SetValue("Nickname", nickCheck.Checked);
+                    settings.WritePersistentSettings();
+                };
+                nickLabel = new Label
+                {
+                    Text = "Use Nickname",
+                    Font = SystemFonts.DefaultFont,
+                    Enabled = false,
+                    AutoSize = true,
+                    Margin = new Padding(3, 0, 40, 0),
+                };
                 fontpicker = new GH_FontControl
                 {
                     Font = LabelWidget.font,
@@ -182,7 +238,6 @@ namespace Melanoplus
                     settings.SetValue("Font", new FontConverter().ConvertToInvariantString(LabelWidget.font));
                     settings.WritePersistentSettings();
                 };
-
                 input = new TextBox()
                 {
                     Text = string.Join(",", LabelWidget.Exclude),
@@ -202,10 +257,19 @@ namespace Melanoplus
                 tableLayoutPanel.SuspendLayout();
                 SuspendLayout();
 
-                tableLayoutPanel.Controls.Add(fontpicker, 0, 0);
-                tableLayoutPanel.Controls.Add(input, 0, 1);
+                tableLayoutPanel.Controls.Add(colour, 0, 0);
+                tableLayoutPanel.Controls.Add(colourLabel, 1, 0);
+                tableLayoutPanel.Controls.Add(nickCheck, 2, 0);
+                tableLayoutPanel.Controls.Add(nickLabel, 3, 0);
+                tableLayoutPanel.Controls.Add(fontpicker, 0, 1);
+                tableLayoutPanel.SetColumnSpan(fontpicker, 4);
+                tableLayoutPanel.Controls.Add(input, 0, 2);
+                tableLayoutPanel.SetColumnSpan(input, 4);
 
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
                 tableLayoutPanel.RowStyles.Add(new RowStyle());
                 tableLayoutPanel.RowStyles.Add(new RowStyle());
 

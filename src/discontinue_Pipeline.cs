@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
+using Grasshopper.Kernel.Types;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,16 @@ using System.Xml.Linq;
 
 namespace Melanoplus
 {
-    public class WIP_Pipeline : GH_Component
+    public class discontinue_Pipeline : GH_Component
     {
+        //Use Human plugin
         public override Guid ComponentGuid => new Guid("{0E750FE4-C32B-4411-B9C3-A2AAEC7CF1A1}");
         public override GH_Exposure Exposure => GH_Exposure.hidden; //GH_Exposure.quarternary | GH_Exposure.obscure;
         protected override Bitmap Icon => base.Icon;
 
         readonly Array ObjTypes = Enum.GetNames(typeof(ObjectType));
 
-        public WIP_Pipeline() : base("Pipeline", "Get", 
+        public discontinue_Pipeline() : base("Pipeline", "Get", 
             "Pipeline to get objects from Rhino", 
             "Params", "Input") { }
         
@@ -35,12 +37,15 @@ namespace Melanoplus
         }
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Doesn't work with object details component rhino object->ref??
             string selected = "";
             DA.GetData("Type",ref selected);
+            if (selected == "None") return;
             RhinoObject[] rObj = Rhino.RhinoDoc.ActiveDoc.Objects.FindByObjectType((ObjectType)Enum.Parse(typeof(ObjectType), selected)); //.Where(t => t.ObjectType == ObjectType.Annotation).Cast<TextObject>().ToList();
+            List<IGH_Goo> refObj = new List<IGH_Goo>();
+            foreach(var o in rObj)
+                refObj.Add(GH_Convert.ObjRefToGeometry(new ObjRef(o)));
             DA.SetDataList(0, rObj.Select(o => o.Attributes));
-            DA.SetDataList(1, rObj.Select(o => o.Geometry));
+            DA.SetDataList(1, refObj);
         }
 
         public override void AddedToDocument(GH_Document document)

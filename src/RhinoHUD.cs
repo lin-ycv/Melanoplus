@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace Melanoplus
 {
-    public class R_HUD : GH_Component, IGH_VariableParameterComponent
+    public class RhinoHUD : GH_Component, IGH_VariableParameterComponent
     {
         public override Guid ComponentGuid => new Guid("{95390F76-AA4C-46D1-9D35-E605C4758835}");
         protected override Bitmap Icon => Properties.Resources.DataHUD;
@@ -37,7 +37,7 @@ namespace Melanoplus
             new Param_Boolean {Name = "centered", NickName = "m", Description = "Position as Mid-point [Optional]", Optional = true, Access = GH_ParamAccess.item },
             new Param_Integer {Name = "size", NickName = "s", Description = "Size of text [Optional]", Optional = true, Access = GH_ParamAccess.item },
         };
-        public R_HUD() : base("Rhino HUD", "HUD", 
+        public RhinoHUD() : base("Rhino HUD", "HUD", 
             "Displays gh data on the viewport", 
             "Display", "Preview") { }
         protected override void RegisterInputParams(GH_InputParamManager pManager)

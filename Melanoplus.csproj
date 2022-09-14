@@ -68,19 +68,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="src\WIP_Choke.cs" />
-    <Compile Include="src\WIP_Viewport.cs" />
-    <Compile Include="src\WIP_Pipeline.cs" />
+    <Compile Include="src\Animate.cs" />
+    <Compile Include="src\CameraSet.cs" />
+    <Compile Include="src\CameraGet.cs" />
+    <Compile Include="src\discontinue_AttributeViewer.cs" />
+    <Compile Include="src\Idempotent.cs" />
+    <Compile Include="src\LabelWidget.cs" />
+    <Compile Include="src\ViewportWidget.cs" />
+    <Compile Include="src\discontinue_Pipeline.cs" />
     <Compile Include="src\ColorCanvas.cs" />
     <Compile Include="src\Recorder.cs" />
-    <Compile Include="src\R_HUD.cs" />
-    <Compile Include="src\CopyWires.cs" />
+    <Compile Include="src\RhinoHUD.cs" />
+    <Compile Include="src\WiresWidget.cs" />
     <Compile Include="src\GroupName.cs" />
     <Compile Include="src\Cluster.cs" />
     <Compile Include="src\CleanCanvas.cs" />
     <Compile Include="src\Snippet.cs" />
     <Compile Include="MelanoplusInfo.cs" />
-    <Compile Include="src\Label.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +126,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DataHUD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\idempotent3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\viewportRhino.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetCamera.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SetCamera.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GIF.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
