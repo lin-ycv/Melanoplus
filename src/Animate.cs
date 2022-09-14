@@ -50,20 +50,20 @@ namespace Melanoplus
 
             NamedViewTable nvt = RhinoDoc.ActiveDoc.NamedViews;
             var views = nvt.Where(v => v.Name.StartsWith("melanoplus_"));
-            int count = nvt.Where(v => v.Name.StartsWith("melanoplus_")).Count();
             if (save)
             {
                 RhinoDoc.ActiveDoc.NamedViews.Add($"melanoplus_{views.GetHashCode()}", vp.Id);
                 pause = true;
                 return;
             }
-            else if (clear && count > 0)
+            else if (clear && nvt.Any())
             {
                 OnPingDocument().ScheduleSolution(5, ClearViews);
                 return;
             }
-            if (time >= 0 && count > 0)
+            if (time >= 0 && nvt.Any())
             {
+                int count = nvt.Where(v => v.Name.StartsWith("melanoplus_")).Count();
                 double progress = (count - 1) * time, remainder = progress % 1.0;
                 ViewportInfo A = nvt[(int)Math.Floor(progress)].Viewport, B = nvt[(int)Math.Ceiling(progress)].Viewport;
                 vp.Camera35mmLensLength = ((B.Camera35mmLensLength - A.Camera35mmLensLength) * remainder) + A.Camera35mmLensLength;
@@ -81,7 +81,7 @@ namespace Melanoplus
             do
             {
                 nvt.Delete(views.First().Name);
-            } while (views.Count() > 0);
+            } while (views.Any());
         }
     }
 }
