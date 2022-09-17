@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using GH_IO.Serialization;
+using Grasshopper.Kernel;
 using Rhino;
 using Rhino.Display;
 using Rhino.DocObjects;
@@ -10,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Melanoplus
 {
@@ -22,7 +24,8 @@ namespace Melanoplus
             "Animate camera thru a series of named views.",
             "Display", "Viewport")
         { }
-        bool pause = false;
+        private bool pause = false;
+        internal bool interpolate = false;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -56,7 +59,7 @@ namespace Melanoplus
                 pause = true;
                 return;
             }
-            else if (clear && nvt.Any())
+            if (clear && nvt.Any())
             {
                 OnPingDocument().ScheduleSolution(5, ClearViews);
                 return;
@@ -67,11 +70,32 @@ namespace Melanoplus
                 double progress = (count - 1) * time, remainder = progress % 1.0;
                 ViewportInfo A = nvt[(int)Math.Floor(progress)].Viewport, B = nvt[(int)Math.Ceiling(progress)].Viewport;
                 vp.Camera35mmLensLength = ((B.Camera35mmLensLength - A.Camera35mmLensLength) * remainder) + A.Camera35mmLensLength;
-                Point3d loc = ((B.CameraLocation - A.CameraLocation) * remainder) + A.CameraLocation, tar = ((B.TargetPoint - A.TargetPoint) * remainder) + A.TargetPoint;
+                Point3d 
+                    loc = interpolate ?
+                        Curve.CreateInterpolatedCurve(nvt.Select(v=>v.Viewport.CameraLocation),3).PointAtNormalizedLength(time)
+                        : ((B.CameraLocation - A.CameraLocation) * remainder) + A.CameraLocation, 
+                    tar = ((B.TargetPoint - A.TargetPoint) * remainder) + A.TargetPoint;
                 Vector3d updir = ((B.CameraUp - A.CameraUp) * remainder) + A.CameraUp;
                 vp.SetCameraLocations(tar, loc);
                 vp.CameraUp = updir;
             }
+        }
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Smooth movement", (s,e)=> interpolate = !interpolate, true, interpolate);
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("curve", interpolate);
+            return base.Write(writer);
+        }
+        public override bool Read(GH_IReader reader)
+        {
+            interpolate = reader.GetBoolean("curve");
+            return base.Read(reader);
         }
 
         private void ClearViews(GH_Document doc)

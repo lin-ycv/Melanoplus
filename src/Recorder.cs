@@ -85,6 +85,7 @@ namespace Melanoplus
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
+            Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Clear record", Reset, Params.Input[2].SourceCount < 1);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Data limit - 0 for none", null, false);

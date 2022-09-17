@@ -101,6 +101,7 @@ namespace Melanoplus
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
+            Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Data dam control", Datadam, true, Params.Input.Any(p => p.Name == "breach dam"));
             base.AppendAdditionalMenuItems(menu);
         }

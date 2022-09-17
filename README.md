@@ -12,3 +12,7 @@ List of Functions:<br>
 (![](./Resources/multiline.png)) Multiline Name <br>
 (![](./Resources/DataHUD.png)) Rhino HUD<br>
 (![](./Resources/MelanoplusSimple.png)) Canvas Colours <br>
+(![](./Resources/viewportRhino.png)) Peek Viewport <br>
+(![](./Resources/GIF.png)) Animate Camera <br>
+(![](./Resources/GetCamera.png)) Get Camera <br>
+(![](./Resources/SetCamera.png)) Set Camera <br>
