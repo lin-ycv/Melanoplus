@@ -48,12 +48,12 @@ namespace Melanoplus
         public LabelWidget()
         {
             GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
-            var cvt = new FontConverter();
             if (settings.Count > 0)
             {
                 enabled = settings.GetValue("Enabled", false);
                 Exclude = new List<string>(settings.GetValue("Exclude", "").Split(','));
-                font = (settings.GetValue("Font", "") is string str) ? cvt.ConvertFromInvariantString(str) as Font : GH_FontServer.StandardItalic;
+                var fDe = settings.GetValue("Font", "").Split('|');
+                font = fDe.Length>0? new Font(fDe[0], float.Parse(fDe[1]), (FontStyle)Convert.ToInt32(fDe[2])) : GH_FontServer.StandardItalic;
                 brush.Color = settings.GetValue("Color", Color.Gray);
                 shownickname = settings.GetValue("Nickname", false);
             }
@@ -62,7 +62,7 @@ namespace Melanoplus
                 string Exclude_defaults = "Colour Swatch,Scribble,Panel,Value List,Button,Boolean Toggle,Number Slider,Sketch";
                 settings.SetValue("Enabled", enabled);
                 settings.SetValue("Exclude", Exclude_defaults);
-                settings.SetValue("Font", cvt.ConvertToInvariantString(font));
+                settings.SetValue("Font", string.Join("|",new string[] {font.FontFamily.Name,font.SizeInPoints.ToString(),((int)font.Style).ToString()}));
                 settings.WritePersistentSettings();
                 Exclude = new List<string>(Exclude_defaults.Split(','));
             }
@@ -235,7 +235,7 @@ namespace Melanoplus
                     LabelWidget.font = fontpicker.Font;
                     Instances.ActiveCanvas.Refresh();
                     GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
-                    settings.SetValue("Font", new FontConverter().ConvertToInvariantString(LabelWidget.font));
+                    settings.SetValue("Font", string.Join("|", new string[] { LabelWidget.font.FontFamily.Name, LabelWidget.font.SizeInPoints.ToString(), ((int)LabelWidget.font.Style).ToString() }));
                     settings.WritePersistentSettings();
                 };
                 input = new TextBox()
