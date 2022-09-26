@@ -50,19 +50,27 @@ namespace Melanoplus
             GH_SettingsServer settings = new GH_SettingsServer("melanoplus_label", true);
             if (settings.Count > 0)
             {
+                try { TryRead(); }
+                catch { Defaults(); }
+            }
+            else
+                Defaults();
+
+            void TryRead()
+            {
                 enabled = settings.GetValue("Enabled", false);
                 Exclude = new List<string>(settings.GetValue("Exclude", "").Split(','));
                 var fDe = settings.GetValue("Font", "").Split('|');
-                font = fDe.Length>0? new Font(fDe[0], float.Parse(fDe[1]), (FontStyle)Convert.ToInt32(fDe[2])) : GH_FontServer.StandardItalic;
+                font = new Font(fDe[0], float.Parse(fDe[1]), (FontStyle)Convert.ToInt32(fDe[2]));
                 brush.Color = settings.GetValue("Color", Color.Gray);
                 shownickname = settings.GetValue("Nickname", false);
             }
-            else
+            void Defaults()
             {
                 string Exclude_defaults = "Colour Swatch,Scribble,Panel,Value List,Button,Boolean Toggle,Number Slider,Sketch";
                 settings.SetValue("Enabled", enabled);
                 settings.SetValue("Exclude", Exclude_defaults);
-                settings.SetValue("Font", string.Join("|",new string[] {font.FontFamily.Name,font.SizeInPoints.ToString(),((int)font.Style).ToString()}));
+                settings.SetValue("Font", string.Join("|", new string[] { font.FontFamily.Name, font.SizeInPoints.ToString(), ((int)font.Style).ToString() }));
                 settings.WritePersistentSettings();
                 Exclude = new List<string>(Exclude_defaults.Split(','));
             }

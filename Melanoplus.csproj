@@ -74,6 +74,9 @@
     <Compile Include="src\discontinue_AttributeViewer.cs" />
     <Compile Include="src\Idempotent.cs" />
     <Compile Include="src\LabelWidget.cs" />
+    <Compile Include="src\TaskMassAdd.cs" />
+    <Compile Include="src\TaskMassBase.cs" />
+    <Compile Include="src\TaskMassMul.cs" />
     <Compile Include="src\ViewportWidget.cs" />
     <Compile Include="src\discontinue_Pipeline.cs" />
     <Compile Include="src\ColorCanvas.cs" />
