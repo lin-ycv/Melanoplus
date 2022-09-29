@@ -17,6 +17,7 @@ namespace Melanoplus
     public class AssemblyPriority : GH_AssemblyPriority
     {
         private static List<ToolStripMenuItem> MenuEntryAllowShortcut = new List<ToolStripMenuItem>() { };
+
         public override GH_LoadingInstruction PriorityLoad()
         {
             GH_Canvas.WidgetListCreated += AddWidget;
@@ -38,19 +39,21 @@ namespace Melanoplus
             LabelWidget.CanvasCreated(c);
             e.AddWidget(new WiresWidget());
             WiresWidget.CanvasCreated(c);
-            e.AddWidget(new ViewportWidget());
-            ViewportWidget.CanvasCreated(c);
+            e.AddWidget(new Viewport2());
+            //ViewportWidget.CanvasCreated(c);
         }
 
         private void LoadQuickButtons(GH_Canvas canvas)
         {
             Instances.CanvasCreated -= LoadQuickButtons;
             ToolStripItemCollection items = ((ToolStrip)(Instances.DocumentEditor).Controls[0].Controls[1]).Items;
+            ((ToolStrip)(Instances.DocumentEditor).Controls[0].Controls[1]).SuspendLayout();
             items.Add(new ToolStripButton("Create Snippet", Properties.Resources.SnippetBuilder, (s, e) => Snippet.Save(canvas.Document))
             {
                 Name = "Melanoplus_Snippet",
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
             });
+            ((ToolStrip)(Instances.DocumentEditor).Controls[0].Controls[1]).ResumeLayout();
         }
         
         private void LoadMenuOptions(GH_Canvas canvas)
