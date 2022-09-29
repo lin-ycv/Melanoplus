@@ -87,7 +87,6 @@
     <Compile Include="src\TaskMassAdd.cs" />
     <Compile Include="src\LoopBegin.cs" />
     <Compile Include="src\LoopEnd.cs" />
-    <Compile Include="src\Viewport2.cs" />
     <Compile Include="src\ViewportWidget.cs" />
     <Compile Include="src\discontinue_Pipeline.cs" />
     <Compile Include="src\ColorCanvas.cs" />

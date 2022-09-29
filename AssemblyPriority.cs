@@ -39,8 +39,8 @@ namespace Melanoplus
             LabelWidget.CanvasCreated(c);
             e.AddWidget(new WiresWidget());
             WiresWidget.CanvasCreated(c);
-            e.AddWidget(new Viewport2());
-            //ViewportWidget.CanvasCreated(c);
+            e.AddWidget(new ViewportWidget());
+            ViewportWidget.CanvasCreated(c);
         }
 
         private void LoadQuickButtons(GH_Canvas canvas)
