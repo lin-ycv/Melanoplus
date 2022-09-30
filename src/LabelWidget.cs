@@ -60,10 +60,10 @@ namespace Melanoplus
             {
                 enabled = settings.GetValue("Enabled", false);
                 Exclude = new List<string>(settings.GetValue("Exclude", "").Split(','));
-                var fDe = settings.GetValue("Font", "").Split('|');
-                font = new Font(fDe[0], float.Parse(fDe[1]), (FontStyle)Convert.ToInt32(fDe[2]));
                 brush.Color = settings.GetValue("Color", Color.Gray);
                 shownickname = settings.GetValue("Nickname", false);
+                var fDe = settings.GetValue("Font", "").Split('|');
+                font = new Font(fDe[0], float.Parse(fDe[1]), (FontStyle)Convert.ToInt32(fDe[2]));
             }
             void Defaults()
             {

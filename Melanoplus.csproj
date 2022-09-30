@@ -81,14 +81,12 @@
     <Compile Include="src\Animate.cs" />
     <Compile Include="src\CameraSet.cs" />
     <Compile Include="src\CameraGet.cs" />
-    <Compile Include="src\discontinue_AttributeViewer.cs" />
     <Compile Include="src\Idempotent.cs" />
     <Compile Include="src\LabelWidget.cs" />
-    <Compile Include="src\TaskMassAdd.cs" />
     <Compile Include="src\LoopBegin.cs" />
     <Compile Include="src\LoopEnd.cs" />
+    <Compile Include="src\TaskMassAdd.cs" />
     <Compile Include="src\ViewportWidget.cs" />
-    <Compile Include="src\discontinue_Pipeline.cs" />
     <Compile Include="src\ColorCanvas.cs" />
     <Compile Include="src\Recorder.cs" />
     <Compile Include="src\RhinoHUD.cs" />
