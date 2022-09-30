@@ -18,6 +18,7 @@ using Grasshopper.GUI;
 using Rhino.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime;
+using RhinoWindows.WindowsLocalization;
 //REF: https://github.com/mcneel/GhCanvasViewport
 
 namespace Melanoplus
@@ -41,9 +42,9 @@ namespace Melanoplus
                     if (_viewportControlPanel.Size.Width >= Instances.ActiveCanvas.Width
                         || _viewportControlPanel.Size.Height >= Instances.ActiveCanvas.Height)
                         _viewportControlPanel.Size = new Size(Instances.ActiveCanvas.Width / 2, Instances.ActiveCanvas.Height / 2);
-                    if(_viewportControlPanel.Location.X < 0 || _viewportControlPanel.Location.X >= Instances.ActiveCanvas.Width
+                    if (_viewportControlPanel.Location.X < 0 || _viewportControlPanel.Location.X >= Instances.ActiveCanvas.Width
                         || _viewportControlPanel.Location.Y < 0 || _viewportControlPanel.Location.Y >= Instances.ActiveCanvas.Height)
-                        _viewportControlPanel.Location= new Point(0, 0);
+                        _viewportControlPanel.Location = new Point(0, 0);
                     _viewportControlPanel.Show();
                     settings.SetValue("enabled", true);
                     settings.WritePersistentSettings();
@@ -56,7 +57,7 @@ namespace Melanoplus
         static RhinoWindows.Forms.Controls.ViewportControl ctrl;
         static GH_SettingsServer settings = new GH_SettingsServer("melanoplus_viewport", true);
         static bool enabled = settings.GetValue("enabled", false);
-        
+
         void CreateView()
         {
             _viewportControlPanel = new ViewportContainerPanel()
@@ -78,7 +79,7 @@ namespace Melanoplus
         public ViewportWidget()
         {
             if (enabled && _viewportControlPanel == null)
-                CreateView();            
+                CreateView();
         }
         internal static void CanvasCreated(GH_Canvas canvas)
         {
@@ -222,15 +223,16 @@ namespace Melanoplus
     class ViewportControl : RhinoWindows.Forms.Controls.ViewportControl
     {
         System.Drawing.Point RightMouseDownLocation { get; set; }
+        bool grid = true, axes = true, worldaxes = true;
         public ViewportControl()
         {
             // stupid hack to get GH to draw preview geometry in this control
             this.Viewport.Name = "GH_HACK";
 
             Viewport.DisplayMode = DisplayModeDescription.FindByName("Shaded");
-            Viewport.ConstructionGridVisible = true;
-            Viewport.ConstructionAxesVisible = true;
-            Viewport.WorldAxesVisible = true;
+            Viewport.ConstructionGridVisible = grid;
+            Viewport.ConstructionAxesVisible = axes;
+            Viewport.WorldAxesVisible = worldaxes;
             Viewport.SetProjection(DefinedViewportProjection.Perspective, "Perspective", true);
 
         }
@@ -238,7 +240,7 @@ namespace Melanoplus
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             Rhino.Geometry.Vector3d vec = Viewport.CameraDirection;
-            Viewport.SetCameraLocation(Viewport.CameraLocation + vec * e.Delta,false);
+            Viewport.SetCameraLocation(Viewport.CameraLocation + vec * e.Delta, false);
             Invalidate();
             //base.OnMouseWheel(e);
         }
@@ -298,10 +300,16 @@ namespace Melanoplus
             {
                 Viewport.Camera35mmLensLength = 50;
                 Viewport.ZoomExtents();
-                Refresh();
+                Invalidate();
+            });
+            contextMenu.MenuItems.Add("Reset View", (s, e) =>
+            {
+                Viewport.Camera35mmLensLength = 50;
+                Viewport.SetCameraLocations(Rhino.Geometry.Point3d.Origin, new Rhino.Geometry.Point3d(708, -1226, 808));
+                Invalidate();
             });
             contextMenu.MenuItems.Add("-");
-            contextMenu.MenuItems.Add("Get Active Viewport", (s,e)=>
+            contextMenu.MenuItems.Add("Get Active Viewport", (s, e) =>
             {
                 var rview = RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport;
                 Viewport.SetCameraLocations(rview.CameraTarget, rview.CameraLocation);
@@ -316,6 +324,25 @@ namespace Melanoplus
                 rview.CameraUp = Viewport.CameraUp;
                 rview.Camera35mmLensLength = Viewport.Camera35mmLensLength;
                 rview.ParentView?.Redraw();
+            });
+            contextMenu.MenuItems.Add("-");
+            contextMenu.MenuItems.Add(grid ? "✔Toggle CPlane Grid" : "Toggle CPlane Grid", (s, e) =>
+            {
+                grid = !grid;
+                Viewport.ConstructionGridVisible = grid;
+                Invalidate();
+            });
+            contextMenu.MenuItems.Add(axes ? "✔Toggle CPlane Axes" : "Toggle CPlane Axes", (s, e) =>
+            {
+                axes = !axes;
+                Viewport.ConstructionAxesVisible = axes;
+                Invalidate();
+            });
+            contextMenu.MenuItems.Add(worldaxes ? "✔Toggle World Axes" : "Toggle World Axes", (s, e) =>
+            {
+                worldaxes = !worldaxes;
+                Viewport.WorldAxesVisible = worldaxes;
+                Invalidate();
             });
             contextMenu.MenuItems.Add("-");
             contextMenu.MenuItems.Add("Close", (s, e) =>
