@@ -83,7 +83,6 @@
     <Compile Include="src\ColorCanvas.cs" />
     <Compile Include="src\Recorder.cs" />
     <Compile Include="src\RhinoHUD.cs" />
-    <Compile Include="src\ViewportWidget.cs" />
     <Compile Include="src\WiresWidget.cs" />
     <Compile Include="src\GroupName.cs" />
     <Compile Include="src\Cluster.cs" />
@@ -94,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -152,6 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\LoopEnd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="WindowsOnly\Melanoplus.WindowsOnly.csproj">
+      <Project>{9e324a28-260c-4d1a-80c2-c16f8a1ab92c}</Project>
+      <Name>Melanoplus.WindowsOnly</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

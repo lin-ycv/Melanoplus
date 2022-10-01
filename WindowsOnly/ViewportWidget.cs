@@ -19,9 +19,10 @@ using Rhino.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime;
 using RhinoWindows.WindowsLocalization;
+
 //REF: https://github.com/mcneel/GhCanvasViewport
 
-namespace Melanoplus.Widget
+namespace Melanoplus.WindowsOnly.Widget
 {
     public class ViewportWidget : GH_Widget
     {
@@ -81,7 +82,7 @@ namespace Melanoplus.Widget
             if (enabled && _viewportControlPanel == null)
                 CreateView();
         }
-        internal static void CanvasCreated(GH_Canvas canvas)
+        public static void CanvasCreated(GH_Canvas canvas)
         {
             if (enabled)
             {

@@ -18,7 +18,7 @@ namespace Melanoplus.Component
         public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.obscure;
         protected override System.Drawing.Bitmap Icon => Instances.ComponentServer.FindObjectByName("MassAddition", true, true).Icon;
 
-        public TaskMassAdd() : base("Mass Addittion (Fast)", "MAF",
+        public TaskMassAdd() : base("Mass Addition (Fast)", "MAF",
         "Perform parallel mass addition of a list of items",
         "Maths", "Operators")
         { }
