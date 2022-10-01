@@ -25,6 +25,7 @@ namespace Melanoplus
         public override GH_LoadingInstruction PriorityLoad()
         {
             GH_Canvas.WidgetListCreated += AddWidget;
+            GH_Canvas.WidgetListCreated += AddWindowsWidget;
             Instances.CanvasCreated += LoadQuickButtons;
             Instances.CanvasCreated += LoadMenuOptions;
             GH_DocumentEditor.AggregateShortcutMenuItems += AggregateShortcutMenuItems;
@@ -41,10 +42,14 @@ namespace Melanoplus
             var c = (GH_Canvas)s;
             e.AddWidget(new WiresWidget());
             WiresWidget.CanvasCreated(c);
-            /*e.AddWidget(new ViewportWidget());
-            ViewportWidget.CanvasCreated(c);*/
             e.AddWidget(new LabelWidget());
             LabelWidget.CanvasCreated(c);
+        }
+        private void AddWindowsWidget(object s, GH_CanvasWidgetListEventArgs e)
+        {
+            GH_Canvas.WidgetListCreated -= AddWindowsWidget;
+            e.AddWidget(new WindowsOnly.Widget.ViewportWidget());
+            WindowsOnly.Widget.ViewportWidget.CanvasCreated((GH_Canvas)s);
         }
 
         private void LoadQuickButtons(GH_Canvas canvas)
@@ -57,11 +62,11 @@ namespace Melanoplus
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 ImageAlign = ContentAlignment.MiddleCenter,
                 ImageScaling = ToolStripItemImageScaling.SizeToFit,
-                Margin = new Padding(1,1,0,2),
+                Margin = new Padding(1, 1, 0, 2),
                 Name = "Melanoplus_Snippet",
-                Size = new Size(28,28),
+                Size = new Size(28, 28),
                 ToolTipText = "Create a multi-component user object.",
-            }) ;
+            });
         }
 
         private void LoadMenuOptions(GH_Canvas canvas)
