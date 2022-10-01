@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Melanoplus
+namespace Melanoplus.Util
 {
     public class Cluster
     {

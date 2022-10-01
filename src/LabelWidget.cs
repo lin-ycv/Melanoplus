@@ -18,7 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Melanoplus
+namespace Melanoplus.Widget
 {
     public class LabelWidget : GH_Widget
     {

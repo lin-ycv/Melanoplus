@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class GroupName : GH_Component
     {

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class Recorder : GH_Component
     {

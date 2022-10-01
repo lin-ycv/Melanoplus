@@ -21,7 +21,7 @@ using System.Runtime;
 using RhinoWindows.WindowsLocalization;
 //REF: https://github.com/mcneel/GhCanvasViewport
 
-namespace Melanoplus
+namespace Melanoplus.Widget
 {
     public class ViewportWidget : GH_Widget
     {

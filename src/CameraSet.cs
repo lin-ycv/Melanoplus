@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GH_IO.Serialization;
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class CameraSet : GH_Component
     {

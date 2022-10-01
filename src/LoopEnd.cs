@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class LoopEnd : GH_Component, IGH_VariableParameterComponent
     {

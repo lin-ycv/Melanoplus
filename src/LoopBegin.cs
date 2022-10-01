@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class LoopBegin : GH_Component, IGH_VariableParameterComponent
     {

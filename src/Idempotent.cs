@@ -13,7 +13,7 @@ using System.Web.UI.WebControls;
 using System.Windows.Forms;
 //REF: https://discourse.mcneel.com/t/how-to-trigger-updates-down-only-selected-outputs-of-component/68441
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class Idempotent : GH_Component, IGH_VariableParameterComponent
     {

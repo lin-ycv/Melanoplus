@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 //REF: https://www.youtube.com/watch?v=B92iN7mOPbk
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class RhinoHUD : GH_Component, IGH_VariableParameterComponent
     {

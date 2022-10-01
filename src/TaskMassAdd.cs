@@ -10,7 +10,7 @@ using Grasshopper;
 using Rhino.Commands;
 //REF: https://discourse.mcneel.com/t/mass-addition-speed-up-component/148121/3
 
-namespace Melanoplus
+namespace Melanoplus.Component
 {
     public class TaskMassAdd : GH_TaskCapableComponent<TaskMassAdd.SolveResultsMassAdd>
     {

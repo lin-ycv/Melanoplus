@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Melanoplus
+namespace Melanoplus.Settings
 {
     public class ColorCanvas : IGH_SettingFrontend
     {

@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="RhinoWindows, Version=7.0.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
       <HintPath>packages\RhinoWindows.7.0.20314.3001\lib\net45\RhinoWindows.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -79,10 +80,10 @@
     <Compile Include="src\LoopBegin.cs" />
     <Compile Include="src\LoopEnd.cs" />
     <Compile Include="src\TaskMassAdd.cs" />
-    <Compile Include="src\ViewportWidget.cs" />
     <Compile Include="src\ColorCanvas.cs" />
     <Compile Include="src\Recorder.cs" />
     <Compile Include="src\RhinoHUD.cs" />
+    <Compile Include="src\ViewportWidget.cs" />
     <Compile Include="src\WiresWidget.cs" />
     <Compile Include="src\GroupName.cs" />
     <Compile Include="src\Cluster.cs" />
