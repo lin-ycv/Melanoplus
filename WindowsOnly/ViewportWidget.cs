@@ -27,7 +27,7 @@ namespace Melanoplus.WindowsOnly.Widget
     public class ViewportWidget : GH_Widget
     {
         public override string Name => "Rhino Viewport";
-        public override string Description => "Rhino viewport inside Grasshopper";
+        public override string Description => "Floating Rhino viewport inside Grasshopper";
         public override Bitmap Icon_24x24 => Properties.Resources.viewportRhino;
         public override bool Visible
         {

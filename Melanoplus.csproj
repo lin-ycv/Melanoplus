@@ -79,6 +79,7 @@
     <Compile Include="src\LabelWidget.cs" />
     <Compile Include="src\LoopBegin.cs" />
     <Compile Include="src\LoopEnd.cs" />
+    <Compile Include="src\ViewportBGWidget.cs" />
     <Compile Include="src\TaskMassAdd.cs" />
     <Compile Include="src\ColorCanvas.cs" />
     <Compile Include="src\Recorder.cs" />
@@ -157,6 +158,9 @@
       <Project>{9e324a28-260c-4d1a-80c2-c16f8a1ab92c}</Project>
       <Name>Melanoplus.WindowsOnly</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\viewportBGRhino.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

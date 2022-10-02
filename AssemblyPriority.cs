@@ -44,6 +44,8 @@ namespace Melanoplus
             WiresWidget.CanvasCreated(c);
             e.AddWidget(new LabelWidget());
             LabelWidget.CanvasCreated(c);
+            e.AddWidget(new ViewportBGWidget());
+            ViewportBGWidget.CanvasCreated(c);
         }
         private void AddWindowsWidget(object s, GH_CanvasWidgetListEventArgs e)
         {
