@@ -2,7 +2,7 @@ name: Publish to PackageManager
 
 on:
   release:
-    type: [published]
+    types: [published]
     
   workflow_dispatch:
 
