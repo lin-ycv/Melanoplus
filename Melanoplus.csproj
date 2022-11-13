@@ -79,6 +79,7 @@
     <Compile Include="src\LabelWidget.cs" />
     <Compile Include="src\LoopBegin.cs" />
     <Compile Include="src\LoopEnd.cs" />
+    <Compile Include="src\TextOutline.cs" />
     <Compile Include="src\ViewportBGWidget.cs" />
     <Compile Include="src\TaskMassAdd.cs" />
     <Compile Include="src\ColorCanvas.cs" />
@@ -161,6 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\viewportBGRhino.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TextOutline.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
