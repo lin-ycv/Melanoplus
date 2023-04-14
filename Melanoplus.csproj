@@ -79,6 +79,7 @@
     <Compile Include="src\LabelWidget.cs" />
     <Compile Include="src\LoopBegin.cs" />
     <Compile Include="src\LoopEnd.cs" />
+    <Compile Include="src\RoundToDecimal.cs" />
     <Compile Include="src\TextOutline.cs" />
     <Compile Include="src\ViewportBGWidget.cs" />
     <Compile Include="src\TaskMassAdd.cs" />
@@ -155,9 +156,15 @@
     <None Include="Resources\LoopEnd.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="DevTools\Melanoplus.DevTools.csproj">
+      <Project>{f820841e-54ed-49b2-b21a-bba8110a4413}</Project>
+      <Name>Melanoplus.DevTools</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="WindowsOnly\Melanoplus.WindowsOnly.csproj">
       <Project>{9e324a28-260c-4d1a-80c2-c16f8a1ab92c}</Project>
       <Name>Melanoplus.WindowsOnly</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +172,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TextOutline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\decimalDecrease.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

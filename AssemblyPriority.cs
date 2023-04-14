@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Melanoplus.Widget;
 using Melanoplus.Util;
-
+using Melanoplus.DevTools;
+using System.Reflection;
 
 namespace Melanoplus
 {
@@ -28,6 +29,7 @@ namespace Melanoplus
             GH_Canvas.WidgetListCreated += AddWindowsWidget;
             Instances.CanvasCreated += LoadQuickButtons;
             Instances.CanvasCreated += LoadMenuOptions;
+            Instances.CanvasCreated += LoadDevMenuOptions;
             GH_DocumentEditor.AggregateShortcutMenuItems += AggregateShortcutMenuItems;
             /*var server = Instances.ComponentServer;
             server.AddCategoryShortName("Melanoplus", "Plus");
@@ -94,6 +96,30 @@ namespace Melanoplus
 
                 editor.ResumeLayout();
                 mnu.DropDownOpening += (s, e) => mnu.DropDownItems["mnuUnlockCluster"].Visible = canvas.IsDocument && canvas.Document.SelectedObjects().Any(o => o is GH_Cluster);
+            }
+        }
+        private void LoadDevMenuOptions(GH_Canvas canvas)
+        {
+            Instances.CanvasCreated -= LoadDevMenuOptions;
+            var editor = Instances.DocumentEditor;
+            if (editor != null)
+            {
+                editor.SuspendLayout();
+
+                var mnu = (ToolStripMenuItem)editor.MainMenuStrip.Items["mnuEdit"];
+                var index = mnu.DropDownItems.IndexOfKey("mnuFind");
+                var getIcon = new ToolStripMenuItem("Extract Icon", Properties.Resources.image, (s, e) => GetIcon.Save(canvas.Document), "mnuGetIcon");
+                mnu.DropDownItems.Insert(index, getIcon);
+                MenuEntryAllowShortcut.Add(getIcon);
+
+                mnu = (ToolStripMenuItem)editor.MainMenuStrip.Items["mnuFile"];
+                index = mnu.DropDownItems.Count;
+                var unload = new ToolStripMenuItem("Unload GH", null, (s, e) => UnloadGH.Unload(), "mnuUnloadGH");
+                mnu.DropDownItems.Insert(index, unload);
+                MenuEntryAllowShortcut.Add(unload);
+
+                editor.ResumeLayout();
+                
             }
         }
         private static void AggregateShortcutMenuItems(object sender, GH_MenuShortcutEventArgs e)

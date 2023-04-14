@@ -127,6 +127,9 @@
   <data name="DataHUD" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DataHUD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="decimalDecrease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\decimalDecrease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="GetCamera" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetCamera.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -135,6 +138,9 @@
   </data>
   <data name="idempotent3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\idempotent3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Label" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Label.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

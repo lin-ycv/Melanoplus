@@ -21,6 +21,7 @@ using System.Runtime;
 using RhinoWindows.WindowsLocalization;
 
 //REF: https://github.com/mcneel/GhCanvasViewport
+//Seperate project because this requires libraries that's available only on windows, when loading on macos, this library will error out, but allows for the main library to continue.
 
 namespace Melanoplus.WindowsOnly.Widget
 {

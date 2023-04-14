@@ -93,6 +93,16 @@ namespace Melanoplus.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap decimalDecrease {
+            get {
+                object obj = ResourceManager.GetObject("decimalDecrease", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap GetCamera {
             get {
                 object obj = ResourceManager.GetObject("GetCamera", resourceCulture);
@@ -116,6 +126,16 @@ namespace Melanoplus.Properties {
         public static System.Drawing.Bitmap idempotent3 {
             get {
                 object obj = ResourceManager.GetObject("idempotent3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap image {
+            get {
+                object obj = ResourceManager.GetObject("image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

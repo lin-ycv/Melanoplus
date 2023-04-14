@@ -32,13 +32,13 @@ namespace Melanoplus
         {
             aTimer.Elapsed += Trigger;
             GH_SettingsServer settings = new GH_SettingsServer("melanoplus_viewport", true);
-            if (settings.Count > 0)
-                enabled = settings.GetValue("Enabled", false);
-            else
-            {
-                settings.SetValue("Enabled", enabled);
-                settings.WritePersistentSettings();
-            }
+            //if (settings.Count > 0)
+            //    enabled = settings.GetValue("Enabled", false);
+            //else
+            //{
+            //    settings.SetValue("Enabled", enabled);
+            //    settings.WritePersistentSettings();
+            //}
 
         }
 

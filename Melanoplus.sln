@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melanoplus", "Melanoplus.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melanoplus.WindowsOnly", "WindowsOnly\Melanoplus.WindowsOnly.csproj", "{9E324A28-260C-4D1A-80C2-C16F8A1AB92C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Melanoplus.DevTools", "DevTools\Melanoplus.DevTools.csproj", "{F820841E-54ED-49B2-B21A-BBA8110A4413}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9E324A28-260C-4D1A-80C2-C16F8A1AB92C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E324A28-260C-4D1A-80C2-C16F8A1AB92C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E324A28-260C-4D1A-80C2-C16F8A1AB92C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F820841E-54ED-49B2-B21A-BBA8110A4413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F820841E-54ED-49B2-B21A-BBA8110A4413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F820841E-54ED-49B2-B21A-BBA8110A4413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F820841E-54ED-49B2-B21A-BBA8110A4413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
