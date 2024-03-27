@@ -1,0 +1,39 @@
+name: Push to Yak on new Release
+
+on:
+  release:
+    types: [published]
+    
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    if: "!github.event.release.prerelease"
+    runs-on: windows-latest
+    env:
+      YAK_TOKEN: ${{ secrets.YAK_TOKEN }} 
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup-msbuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
+        
+      - name: Build Solution
+        run: msbuild Melanoplus.sln -t:build -restore -m -p:RestorePackagesConfig=true,Configuration=Release
+          
+      - name: Get Manifest and Push
+        run: | 
+          curl https://files.mcneel.com/yak/tools/latest/yak.exe -o yak.exe
+          cd src\bin\Release\net48
+          del *.pdb
+          curl https://raw.githubusercontent.com/lin-ycv/Melanoplus/Docs/manifest.yml -o manifest.yml
+          curl https://raw.githubusercontent.com/lin-ycv/Melanoplus/main/Resources/MelanoplusSimple.png -o Melanoplus.png
+          ..\yak.exe build --platform 'any'
+          $YAK_FILENAME = dir *.yak 
+          $name = $YAK_FileNAME.name.Split("-")
+          $name = $name[0]+"-"+$name[1]+"-any-any.yak"
+          Rename-Item $YAK_FileNAME.name $name
+          ..\yak.exe push $YAK_FILENAME.Name

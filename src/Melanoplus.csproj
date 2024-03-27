@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net7.0-windows;net48</TargetFrameworks>
+	<LangVersion>12</LangVersion>
+	<UseWindowsForms>true</UseWindowsForms>
+	<EnableDynamicLoading>true</EnableDynamicLoading>
+    <AssemblyTitle>Melanoplus</AssemblyTitle>
+	<TargetExt>.gha</TargetExt>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<FileVersion></FileVersion>
+	<AssemblyVersion>1.1.6</AssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="7.19.22165.13001" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.2" Condition="false" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" Condition="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Eto.Drawing">
+      <Alias>ED</Alias>
+    </Using>
+    <Using Include="Eto.Forms">
+      <Alias>EF</Alias>
+    </Using>
+    <Using Include="GH_IO.Serialization" />
+    <Using Include="Grasshopper" />
+    <Using Include="Grasshopper.GUI" />
+    <Using Include="Grasshopper.GUI.Canvas" />
+    <Using Include="Grasshopper.GUI.Canvas.Interaction" />
+    <Using Include="Grasshopper.GUI.Widgets" />
+    <Using Include="Grasshopper.Kernel" />
+    <Using Include="Grasshopper.Kernel.Attributes" />
+    <Using Include="Grasshopper.Kernel.Data" />
+    <Using Include="Grasshopper.Kernel.Special" />
+    <Using Include="Grasshopper.Kernel.Types" />
+    <Using Include="Grasshopper.Kernel.Undo" />
+    <Using Include="Grasshopper.Kernel.Undo.Actions" />
+    <Using Include="Rhino" />
+    <Using Include="Rhino.Display" />
+    <Using Include="Rhino.Geometry">
+      <Alias>RG</Alias>
+    </Using>
+    <Using Include="System.ComponentModel" />
+    <Using Include="System.Reflection" />
+    <Using Include="System.Text" />
+  </ItemGroup>
+</Project>

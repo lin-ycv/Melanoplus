@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "Rhino8": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Rhino 8\\System\\Rhino.exe",
+      "commandLineArgs": "-nosplash -notemplate /netcore /runscript=\"_-Grasshopper Banner Disable Window Load Window Show _Enter\"",
+      "environmentVariables": {
+        "RHINO_PACKAGE_DIRS": "$(ProjectDir)$(OutputPath)"
+      }
+    },
+    "Rhino8 netfx": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Rhino 8\\System\\Rhino.exe",
+      "commandLineArgs": "-nosplash -notemplate /netfx /runscript=\"_-Grasshopper Banner Disable Window Load Window Show _Enter\"",
+      "environmentVariables": {
+        "RHINO_PACKAGE_DIRS": "$(ProjectDir)$(OutputPath)"
+      }
+    },
+    "Rhino7": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Rhino 7\\System\\Rhino.exe",
+      "commandLineArgs": "-nosplash -notemplate /runscript=\"_-Grasshopper Banner Disable Window Load Window Show _Enter\"",
+      "environmentVariables": {
+        "RHINO_PACKAGE_DIRS": "$(ProjectDir)$(OutputPath)"
+      }
+    }
+  }
+}
