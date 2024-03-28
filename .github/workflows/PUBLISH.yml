@@ -15,9 +15,9 @@ jobs:
       YAK_TOKEN: ${{ secrets.YAK_TOKEN }} 
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
         with:
           msbuild-architecture: x64
         
@@ -30,10 +30,10 @@ jobs:
           cd src\bin\Release\net48
           del *.pdb
           curl https://raw.githubusercontent.com/lin-ycv/Melanoplus/Docs/manifest.yml -o manifest.yml
-          curl https://raw.githubusercontent.com/lin-ycv/Melanoplus/main/Resources/MelanoplusSimple.png -o Melanoplus.png
-          ..\yak.exe build --platform 'any'
+          curl https://raw.githubusercontent.com/lin-ycv/Melanoplus/Docs/MelanoplusSimple.png -o Melanoplus.png
+          ..\..\..\..\yak.exe build --platform 'any'
           $YAK_FILENAME = dir *.yak 
           $name = $YAK_FileNAME.name.Split("-")
           $name = $name[0]+"-"+$name[1]+"-any-any.yak"
           Rename-Item $YAK_FileNAME.name $name
-          ..\yak.exe push $YAK_FILENAME.Name
+          ..\..\..\..\yak.exe push $name

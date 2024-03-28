@@ -8,30 +8,30 @@
 
 </div>
 
-This is a Grasshopper plugin containing a collection of utilities.
+Melanoplus is a large genus of Grasshopper
 
-Melanoplus is a large genus of Grasshopper. From icon design to component and menu placement, it is designed to blend into native Grasshopper and minimize the presence of the plugin.
+This Grasshopper plugin comprises a set of utilities designed to enhance the native Grasshopper experience by introducing essential functions that are currently absent.
 
 ## Install
 
 - Install using the `_PackageMager` command in Rhino and search for `Melanoplus`
 
-To maximize compatibility, only .NET Framework version is published on PackageManager; while .NET version is offered in the release section.
+For compatibility optimization, only the .NET Framework version is published on PackageManager, while the .NET version is provided in the release section.
 
-> Version x.1.x targets .NET 7.0, and only works with Rhino 8 when `_SetDotNetRuntime` is in `/netcore` mode (default).<br>
-> Version x.0.x targets .NET Framework 4.8, and works with Rhino 7.19+ and Rhino 8.
+The minor version denotes the targeted framework:
+- Version x.1.x is tailored for .NET 7.0, functioning exclusively with Rhino 8 when `_SetDotNetRuntime` is in `/netcore` mode, the default setting in Rhino 8.
+- Version x.0.x is geared towards .NET Framework 4.8, compatible with Rhino 7.19+ and Rhino 8.
 
-*Ie: 0.1.6 and 0.0.6 is the same version of the plugin*
+For instance, 1.1.6 and 1.0.6 represent the same version of the plugin.
 
 [Read more](https://developer.rhino3d.com/guides/rhinocommon/moving-to-dotnet-7/) on .NET and .NET Framework differences.
 
-> Melanoplus is tested against the latest version of Rhino at the time of release. <br>
-> While Melanoplus is designed and tested on Windows, Mac users can still install this plugin at their own discretion. 
+>Melanoplus is tested against the most recent version of Rhino available at the time of its release. While Melanoplus is primarily designed and validated for Windows, Mac users can still choose to install this plugin at their own discretion.
 
 ## Support and Feedback
 
-Bug reporting is done through [GitHub Issues](https://github.com/lin-ycv/Melanoplus/issues), or if you're code literate, you can fix the bug and create a [Pull request](https://github.com/lin-ycv/Melanoplus/pulls) for the fix.
+You can report bugs via [GitHub Issues](https://github.com/lin-ycv/Melanoplus/issues). Alternatively, if you're familiar with coding, you can address the bug yourself and submit a [Pull Request](https://github.com/lin-ycv/Melanoplus/pulls) with the fix.
 
-If you require support or have feedback, please use [GitHub Discussions](https://github.com/lin-ycv/Melanoplus/discussions).
+For support or feedback, please utilize [GitHub Discussions](https://github.com/lin-ycv/Melanoplus/discussions).
 
-There are some functionality demos in the [Wiki Page](https://github.com/lin-ycv/Melanoplus/wiki).
+You can find demos of various functionalities on the [Wiki Page](https://github.com/lin-ycv/Melanoplus/wiki).
