@@ -8,7 +8,7 @@
 	<TargetExt>.gha</TargetExt>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<FileVersion></FileVersion>
-	<AssemblyVersion>1.1.6</AssemblyVersion>
+	<AssemblyVersion>1.1.6.1</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows|AnyCPU'">
     <DebugType>portable</DebugType>

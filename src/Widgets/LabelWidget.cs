@@ -10,7 +10,7 @@
 
         public override string Name => "Label";
 
-        public override string Description => "Display component name/nickname above component\r\nDouble click to toggle between Fullname and Nickname\r\n.\r\nAdditional settings in Grasshopper Preferences";
+        public override string Description => "Display component name/nickname above component\r\nAdditional settings in Grasshopper Preferences";
 
         public override Bitmap Icon_24x24 => Properties.Resources.Label;
         private static readonly StringFormat alignment = new() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Far };

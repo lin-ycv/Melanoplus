@@ -11,7 +11,7 @@
 #if NET7_0_OR_GREATER
         public override string Version => _v.ToString();
 #else
-        public override string Version => $"{_v.Major}.0.{_v.Build}";
+        public override string Version => $"{_v.Major}.0.{_v.Build}.{_v.Revision}";
 #endif
         private readonly Version _v = Assembly.GetExecutingAssembly().GetName().Version;
     }

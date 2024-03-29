@@ -91,6 +91,7 @@
                         AllowAlpha = true,
                         Color = Colours[int.Parse(button.ID)],
                     };
+                    form.Topmost = false;
                     if (picker.ShowDialog(layout) == EF.DialogResult.Ok)
                     {
                         int id = int.Parse(button.ID);
@@ -100,7 +101,7 @@
                         button.BackgroundColor = Colours[id];
                         button.TextColor = GetContrastColor(Colours[id]);
                     }
-                    form.BringToFront();
+                    form.Topmost = true;
                 };
                 EF.DropDown drop = new()
                 {

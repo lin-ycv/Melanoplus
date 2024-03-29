@@ -17,10 +17,14 @@
             form.ShowModal(Instances.EtoDocumentEditor);
             string name = ((InputForm)form).GetText();
             if (((InputForm)form).Result != DialogResult.OK) return;
+            GH_UndoRecord record = new("Rename Groups");
             foreach (GH_Group group in groups.Cast<GH_Group>())
             {
+                GH_NickNameAction action = new(group);
                 group.NickName = name;
+                record.AddAction(action);
             }
+            Instances.ActiveCanvas.Document.UndoServer.PushUndoRecord(record);
             Instances.ActiveCanvas.Refresh();
         }
     }
