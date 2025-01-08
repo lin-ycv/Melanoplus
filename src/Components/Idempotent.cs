@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel.Parameters;
+using System;
 
 namespace Melanoplus.Components
 {
@@ -82,6 +83,14 @@ namespace Melanoplus.Components
         public override void AddedToDocument(GH_Document document)
         {
             Params.ParameterChanged += Renamed;
+            if(_additionals > 0)
+            {
+                for (int i = 1; i <= _additionals; i++)
+                {
+                    UpdateOutput.Insert(i, true);
+                    PreviousData.Insert(i, "");
+                }
+            }
             base.AddedToDocument(document);
         }
 
@@ -101,6 +110,7 @@ namespace Melanoplus.Components
             UpdateOutput.Insert(index, true);
             PreviousData.Insert(index, "");
             Params.Output.Insert(index, new Param_GenericObject { Name = $"{index}", NickName = $"{index}", Description = "Stable output", Access = GH_ParamAccess.tree, MutableNickName = false });
+            _additionals++;
             return new Param_GenericObject { Name = $"{index}", NickName = $"{index}", Description = "Data to monitor", Access = GH_ParamAccess.tree, Optional = true };
         }
 
@@ -109,6 +119,7 @@ namespace Melanoplus.Components
             UpdateOutput.RemoveAt(index);
             PreviousData.RemoveAt(index);
             Params.UnregisterOutputParameter(Params.Output[index]);
+            _additionals--;
             return true;
         }
 
@@ -145,6 +156,19 @@ namespace Melanoplus.Components
             Params.OnParametersChanged();
             ExpireSolution(true);
         }
+
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetInt32("additionals", _additionals);
+            return base.Write(writer);
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            reader.TryGetInt32("additionals", ref _additionals);
+            return base.Read(reader);
+        }
+        private int _additionals = 0;
     }
 }
 // REF: https://discourse.mcneel.com/t/how-to-trigger-updates-down-only-selected-outputs-of-component/68441
