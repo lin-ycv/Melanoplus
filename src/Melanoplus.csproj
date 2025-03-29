@@ -7,7 +7,6 @@
     <AssemblyTitle>Melanoplus</AssemblyTitle>
 	<TargetExt>.gha</TargetExt>
 	<ImplicitUsings>enable</ImplicitUsings>
-	<FileVersion></FileVersion>
 	<AssemblyVersion>1.1.6.1</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows|AnyCPU'">
@@ -22,10 +21,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Grasshopper" Version="7.0.20314.3001">
+	  <ExcludeAssets> runtime </ExcludeAssets>
+	</PackageReference>
+  </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Grasshopper" Version="7.19.22165.13001" />
+	<PackageReference Include="Grasshopper" Version="8.0.23304.9001">
+	  <ExcludeAssets> runtime </ExcludeAssets>
+	</PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="8.0.2" Condition="false" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" Condition="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="IOComponents">
+      <HintPath>..\IOComponents.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

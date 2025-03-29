@@ -193,6 +193,16 @@ namespace Melanoplus.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TextOutline {
+            get {
+                object obj = ResourceManager.GetObject("TextOutline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Unlock {
             get {
                 object obj = ResourceManager.GetObject("Unlock", resourceCulture);

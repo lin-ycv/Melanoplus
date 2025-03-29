@@ -8,13 +8,13 @@
         {
             try
             {
-                GH_Canvas.WidgetListCreated += new GH_Canvas.WidgetListCreatedEventHandler(AddWidget);
-                Instances.CanvasCreated += AddMenu;
-                GH_DocumentEditor.AggregateShortcutMenuItems += new GH_DocumentEditor.AggregateShortcutMenuItemsEventHandler(Shorcuts);
+                GH_Canvas.WidgetListCreated += AddWidget;
+                Instances.CanvasCreated += CanvasCreated;
+                GH_DocumentEditor.AggregateShortcutMenuItems += Shorcuts;
 
                 var server = Instances.ComponentServer;
                 server.AddCategoryShortName("Melanoplus", "Plus");
-                server.AddCategorySymbolName("Melanoplus", '➕');
+                server.AddCategorySymbolName("Melanoplus", '+');
                 server.AddCategoryIcon("Melanoplus", Properties.Resources.MelanoplusSimple16);
             }
             catch (Exception e)
@@ -26,12 +26,12 @@
 
         private void AddWidget(object sender, GH_CanvasWidgetListEventArgs e)
         {
-            Widgets.LabelWidget label = new();
-            e.AddWidget(label);
+            e.AddWidget(new Widgets.LabelWidget());
         }
 
-        private void AddMenu(GH_Canvas canvas)
+        private void CanvasCreated(GH_Canvas canvas)
         {
+            Instances.DocumentServer.DocumentAdded += Utils.AutoLoad.Handler;
             GUI.GhMenu menu = new();
             menu.AddMenu();
         }

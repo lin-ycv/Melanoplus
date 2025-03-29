@@ -9,7 +9,7 @@ namespace Melanoplus.GUI
         {
             Name = "Melanoplus",
             ToolTipText = "Melanoplus",
-            Text = "➕",
+            Text = "+",
         };
         internal void AddMenu()
         {

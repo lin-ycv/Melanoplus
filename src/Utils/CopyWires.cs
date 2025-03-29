@@ -9,8 +9,11 @@
             RhinoApp.Closing += (s, e) =>
             {
                 GH_SettingsServer settings = new("Melanoplus", true);
-                settings.SetValue("CopyWires", Enabled);
-                settings.WritePersistentSettings();
+                if (settings.GetValue("CopyWires", false) != Enabled)
+                {
+                    settings.SetValue("CopyWires", Enabled);
+                    settings.WritePersistentSettings();
+                }
             };
         }
 

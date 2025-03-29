@@ -11,8 +11,11 @@ namespace Melanoplus.Utils
             RhinoApp.Closing += (s, e) =>
             {
                 GH_SettingsServer settings = new("Melanoplus", true);
-                settings.SetValue("BreakWires", Enabled);
-                settings.WritePersistentSettings();
+                if (settings.GetValue("BreakWires", false) != Enabled)
+                {
+                    settings.SetValue("BreakWires", Enabled);
+                    settings.WritePersistentSettings();
+                }
             };
         }
 
@@ -91,20 +94,31 @@ namespace Melanoplus.Utils
                 ymin = Math.Min(p1.Y, p2.Y),
                 ymax = Math.Max(p1.Y, p2.Y),
                 stepx = (xmax - xmin) / (int)(xmax - xmin),
-                stepy = (ymax - ymin) / (int)(ymax - ymin);
+                stepy = (ymax - ymin) / (int)(ymax - ymin),
+                xx = xmax - xmin,
+                yy = ymax - ymin;
+            bool xy = xx < yy;
 
-
-
-            Parallel.For(0, (int)(xmax - xmin), x =>
-            {
-                Parallel.For(0, (int)(ymax - ymin), y =>
+            if (xy)
+                Parallel.For(0, (int)xx, x =>
                 {
-                    PointF p = new(xmin + x * stepx, ymin + y * stepy);
-                    IGH_Param source = null, target = null;
-                    if (canvas.Document.FindWireAt(p, 5f, ref source, ref target))
-                        ts.GetOrAdd(target, _ => new ConcurrentDictionary<IGH_Param, byte>())[source] = 0;
+                    for (int y = 0; y < (int)yy; y++)
+                        detect(x, y);
                 });
-            });
+            else
+                Parallel.For(0, (int)yy, y =>
+                {
+                    for (int x = 0; x < (int)xx; x++)
+                        detect(x, y);
+                });
+
+            void detect(int x, int y)
+            {
+                PointF p = new(xmin + x * stepx, ymin + y * stepy);
+                IGH_Param source = null, target = null;
+                if (canvas.Document.FindWireAt(p, 5f, ref source, ref target))
+                    ts.GetOrAdd(target, _ => new ConcurrentDictionary<IGH_Param, byte>())[source] = 0;
+            }
 
             return ts;
         }

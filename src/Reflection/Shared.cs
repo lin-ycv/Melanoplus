@@ -2,6 +2,7 @@
 {
     internal class R8
     {
+#if NET48
         internal static void UseRhinoStyle(dynamic eto)
         {
             if (RhinoApp.ExeVersion < 8) return;
@@ -21,5 +22,6 @@
                     break;
             }
         }
+#endif
     }
 }

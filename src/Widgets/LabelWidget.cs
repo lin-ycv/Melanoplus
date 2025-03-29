@@ -20,14 +20,14 @@
         internal static Font Font = GH_FontServer.StandardItalic;
         private readonly List<RectangleF> _labels;
 
-        public LabelWidget() : base()
+        public LabelWidget()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
             string defaultExlusion = "Relay,Panel,Button,Boolean Toggle,Number Slider,Sketch,Scribble",
                 defaultString = converter.ConvertToInvariantString(GH_FontServer.StandardItalic);
             GH_SettingsServer settings = new("Melanoplus", true);
             Color = settings.GetValue("LabelWidget.Color", Color.Black);
-            Visible = settings.GetValue("LabelWidget.Enabled", false);
+            Visible = settings.GetValue("LabelWidget.Enabled", true);
             Nickname = settings.GetValue("LabelWidget.NickName", false);
             CustomNickname = settings.GetValue("LabelWidget.CustomNickName", false);
             Exclude =
@@ -38,45 +38,53 @@
             _labels = [];
             RhinoApp.Closing += (s, e) =>
             {
+                settings = new("Melanoplus", true);
                 bool save = false;
                 if (Color != settings.GetValue("LabelWidget.Color", Color.Black))
-                    settings.SetValue("LabelWidget.Color", Color); save = true;
+                { 
+                    settings.SetValue("LabelWidget.Color", Color); 
+                    save = true; 
+                }
                 if (Visible != settings.GetValue("LabelWidget.Enabled", false))
-                    settings.SetValue("LabelWidget.Enabled", Visible); save = true;
+                { 
+                    settings.SetValue("LabelWidget.Enabled", Visible); 
+                    save = true; 
+                }
                 if (Nickname != settings.GetValue("LabelWidget.NickName", false))
-                    settings.SetValue("LabelWidget.NickName", Nickname); save = true;
+                { 
+                    settings.SetValue("LabelWidget.NickName", Nickname); 
+                    save = true; 
+                }
                 if (CustomNickname != settings.GetValue("LabelWidget.CustomNickName", false))
-                    settings.SetValue("LabelWidget.CustomNickName", CustomNickname); save = true;
-                if (Exclude != settings.GetValue("LabelWidget.Exclude", defaultExlusion).Split(',').ToList())
+                { 
+                    settings.SetValue("LabelWidget.CustomNickName", CustomNickname); 
+                    save = true; 
+                }
+                var excludes = settings.GetValue("LabelWidget.Exclude", defaultExlusion).Split(',').ToList();
+                if (Exclude.Except(excludes).Any() || excludes.Except(Exclude).Any())
 #if NET7_0
-                    settings.SetValue("LabelWidget.Exclude", string.Join(',', Exclude)); save = true;
+                {
+                    settings.SetValue("LabelWidget.Exclude", string.Join(',', Exclude)); 
+                    save = true;
+                }
 #else
-                    settings.SetValue("LabelWidget.Exclude", string.Join(",", Exclude)); save = true;
+                { 
+                    settings.SetValue("LabelWidget.Exclude", string.Join(",", Exclude)); 
+                    save = true; 
+                }
 #endif
-                if (Font != (Font)converter.ConvertFromString(settings.GetValue("LabelWidget.Font", defaultString)))
-                    settings.SetValue("LabelWidget.Font", converter.ConvertToInvariantString(Font)); save = true;
+                if (new FontConverter().ConvertToString(Font) != settings.GetValue("LabelWidget.Font", defaultString))
+                { 
+                    settings.SetValue("LabelWidget.Font", converter.ConvertToInvariantString(Font)); 
+                    save = true; 
+                }
                 if (save)
                     settings.WritePersistentSettings();
             };
         }
-        
-        //public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
-        //{
-        //    Nickname = !Nickname;
-        //    Instances.RedrawCanvas();
-        //    return GH_ObjectResponse.Handled;
-        //}
         public override bool Contains(Point pt_control, PointF pt_canvas)
         {
             return false;
-            //foreach (RectangleF label in _labels)
-            //{
-            //    if (label.Contains(pt_canvas))
-            //    {
-            //        return true;
-            //    }
-            //}
-            //return false;
         }
 
         public override void Render(GH_Canvas Canvas)

@@ -6,10 +6,10 @@ namespace Melanoplus.GUI
     {
         public string Category => "Widgets";
         public string Name => "Label (Melanoplus)";
-        public IEnumerable<string> Keywords => new string[]
-        {
+        public IEnumerable<string> Keywords =>
+        [
             "Widget", "Label", "Font",
-        };
+        ];
 
         public Control SettingsUI()
         {
@@ -32,7 +32,7 @@ namespace Melanoplus.GUI
             LayoutPanel = new()
             {
                 Dock = DockStyle.Fill,
-                Location = new Point(0,0),
+                Location = new Point(0, 0),
                 Margin = new Padding(24, 23, 24, 23),
                 Name = "LayoutPanel",
                 Size = _container,
@@ -88,10 +88,10 @@ namespace Melanoplus.GUI
             {
                 AllowDrop = true,
                 Colour = LabelWidget.Color,
-                Location = new Point(0,0),
+                Location = new Point(0, 0),
                 Margin = new Padding(6, 0, 6, 0),
                 Name = "ColorPicker",
-                Size = new Size(20,20),
+                Size = new Size(20, 20),
             };
             ColorPicker.ColourChanged += (sender, e) =>
             {
@@ -101,7 +101,7 @@ namespace Melanoplus.GUI
             ColorLabel = new()
             {
                 Dock = DockStyle.Fill,
-                Margin = new Padding(6,3,6,0),
+                Margin = new Padding(6, 3, 6, 0),
                 Name = "ColorLabel",
                 Size = new Size(231, 20),
                 Text = "Label Color",
@@ -116,7 +116,7 @@ namespace Melanoplus.GUI
                 Dock = DockStyle.Fill,
                 Font = LabelWidget.Font,
                 Location = new Point(0, 0),
-                Margin = new Padding(6,6,6,0),
+                Margin = new Padding(6, 6, 6, 0),
                 Name = "FontPicker",
                 Size = new Size(514, 75),
             };
@@ -127,16 +127,16 @@ namespace Melanoplus.GUI
                 TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
             };
             Exclude = new()
-            {   
+            {
                 AcceptsReturn = false,
                 AcceptsTab = false,
                 Dock = DockStyle.Fill,
-                Margin = new Padding(6,0,6,6),
+                Margin = new Padding(6, 0, 6, 6),
                 Multiline = true,
                 Name = "Exclude",
                 ScrollBars = ScrollBars.Vertical,
                 Size = new Size(514, 36),
-                Text = string.Join(",",LabelWidget.Exclude),
+                Text = string.Join(",", LabelWidget.Exclude),
 #if NET7_0_OR_GREATER
                 PlaceholderText = "Comma separated list of component names to exclude from labeling",
 #endif
@@ -144,7 +144,7 @@ namespace Melanoplus.GUI
             Exclude.TextChanged += (sender, e) =>
             {
                 string text = ((TextBox)sender).Text;
-                LabelWidget.Exclude = 
+                LabelWidget.Exclude =
                     [
 #if NET7_0_OR_GREATER
                         .. text.Split(',',StringSplitOptions.RemoveEmptyEntries|StringSplitOptions.TrimEntries)
@@ -206,7 +206,7 @@ namespace Melanoplus.GUI
             LayoutPanel.Controls.Add(Exclude, 0, 4);
             LayoutPanel.SetColumnSpan(Exclude, 2);
             LayoutPanel.Controls.Add(ButtonSelected, 1, 5);
-            
+
 
             AutoScaleDimensions = new SizeF(6f, 13f);
             AutoScaleMode = AutoScaleMode.Font;

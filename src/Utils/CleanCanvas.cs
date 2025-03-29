@@ -12,15 +12,15 @@
 
                 if (objs.Any())
                 {
-                    EF.DialogResult answer = EF.MessageBox.Show("Remove Placholder components?\r\nThis is a non-reversible process.", "Clean Canvs", EF.MessageBoxButtons.YesNoCancel, EF.MessageBoxType.Question);
+                    EF.DialogResult answer = EF.MessageBox.Show("Remove Placholder components?\r\nThis is a non-reversible process.", "Clean Canvs - Melanoplus", EF.MessageBoxButtons.YesNoCancel, EF.MessageBoxType.Question);
                     if (answer == EF.DialogResult.No)
-                        objs = Enumerable.Empty<IGH_DocumentObject>();
+                        objs = [];
                     else if (answer == EF.DialogResult.Cancel)
                         return;
                 }
 
                 if (group.Any() &&
-                    EF.MessageBox.Show("Remove transparent groups?", "Clean Canvs", EF.MessageBoxButtons.YesNo, EF.MessageBoxType.Question, EF.MessageBoxDefaultButton.Yes) == EF.DialogResult.Yes)
+                    EF.MessageBox.Show("Remove transparent groups?", "Clean Canvs - Melanoplus", EF.MessageBoxButtons.YesNo, EF.MessageBoxType.Question, EF.MessageBoxDefaultButton.Yes) == EF.DialogResult.Yes)
                 {
                     objs = objs.Concat(group);
                     document.UndoUtil.RecordRemoveObjectEvent("Clean transparent groups", group);

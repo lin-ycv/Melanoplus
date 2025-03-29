@@ -46,7 +46,7 @@
             {
                 ShowInTaskbar = true,
                 Owner = Instances.EtoDocumentEditor,
-                Title = "Configure Group Presets",
+                Title = "Configure Group Presets - Melanoplus",
                 MinimumSize = new(400, 290),
                 Topmost = true,
             };
@@ -60,7 +60,11 @@
                 }
                 settings.WritePersistentSettings();
             };
+#if NET7_0_OR_GREATER
+            Rhino.UI.EtoExtensions.UseRhinoStyle(form);
+#else
             Reflection.R8.UseRhinoStyle(form);
+#endif
 
             EF.DynamicLayout layout = new();
 
@@ -156,7 +160,9 @@
             foreach (var obj in ghdoc.SelectedObjects())
                 if (obj is not GH_Group)
                     grp.AddObject(obj.InstanceGuid);
+            GH_AddObjectAction action = new(grp);
             ghdoc.AddObject(grp, true);
+            Instances.ActiveCanvas.Document.UndoServer.PushUndoRecord($"Group Preset {i}", action);
         }
     }
 }

@@ -6,10 +6,10 @@
 
         public string Name => "Canvas Colours (Melanoplus)";
 
-        public IEnumerable<string> Keywords => new string[]
-        {
+        public IEnumerable<string> Keywords =>
+        [
             "Canvas", "Colour",
-        };
+        ];
         public Control SettingsUI()
         {
             return new GH_CanvasColorFrontEnd();
@@ -32,12 +32,11 @@
                 Location = new Point(0, 0),
                 Margin = new Padding(0),
                 Name = "LayoutPanel",
-                //Size = new Size(514, 124),
                 ColumnCount = 2,
                 RowCount = 4,
             };
             SwatchLabelLayout = [new(), new(), new(), new(), new(),];
-            for(int i = 0; i < SwatchLabelLayout.Length; i++)
+            for (int i = 0; i < SwatchLabelLayout.Length; i++)
             {
                 SwatchLabelLayout[i].ColumnCount = 2;
                 SwatchLabelLayout[i].RowCount = 1;
@@ -66,15 +65,15 @@
                 Checked = GH_Skin.canvas_mono,
                 Dock = DockStyle.Fill,
                 Location = new Point(38, 0),
-                Margin = new Padding(6,0,0,0),
+                Margin = new Padding(6, 0, 0, 0),
                 Size = new Size(100, 20),
                 Text = "Mono Colour",
                 UseVisualStyleBackColor = true,
             };
-            CheckMono.CheckedChanged += (s, e) => 
+            CheckMono.CheckedChanged += (s, e) =>
             {
                 ToggleMono(CheckMono.Checked);
-                Instances.ActiveCanvas.Refresh();;
+                Instances.ActiveCanvas.Refresh();
             };
             LayoutPanel.Controls.Add(CheckMono, 0, 0);
             // Row 1 Column 2
@@ -86,10 +85,10 @@
                 Margin = new Padding(0),
                 Size = new Size(20, 20),
             };
-            SwatchMono.ColourChanged += (s, e) => 
-            { 
+            SwatchMono.ColourChanged += (s, e) =>
+            {
                 GH_Skin.canvas_mono_color = SwatchMono.Colour;
-                Instances.ActiveCanvas.Refresh();;
+                Instances.ActiveCanvas.Refresh();
             };
             LabelMono = new()
             {
@@ -112,10 +111,10 @@
                 Margin = new Padding(0),
                 Size = new Size(20, 20),
             };
-            SwatchBack.ColourChanged += (s, e) => 
-            { 
-                GH_Skin.canvas_back = SwatchBack.Colour; 
-                Instances.ActiveCanvas.Refresh();; 
+            SwatchBack.ColourChanged += (s, e) =>
+            {
+                GH_Skin.canvas_back = SwatchBack.Colour;
+                Instances.ActiveCanvas.Refresh();
             };
             LabelBack = new()
             {
@@ -137,10 +136,10 @@
                 Margin = new Padding(0),
                 Size = new Size(20, 20),
             };
-            SwatchEdge.ColourChanged += (s, e) => 
-            { 
-                GH_Skin.canvas_edge = SwatchEdge.Colour; 
-                Instances.ActiveCanvas.Refresh();; 
+            SwatchEdge.ColourChanged += (s, e) =>
+            {
+                GH_Skin.canvas_edge = SwatchEdge.Colour;
+                Instances.ActiveCanvas.Refresh();
             };
             LabelEdge = new()
             {
@@ -163,10 +162,10 @@
                 Margin = new Padding(0),
                 Size = new Size(20, 20),
             };
-            SwatchShade.ColourChanged += (s, e) => 
-            { 
+            SwatchShade.ColourChanged += (s, e) =>
+            {
                 GH_Skin.canvas_shade = SwatchShade.Colour;
-                Instances.ActiveCanvas.Refresh();;
+                Instances.ActiveCanvas.Refresh();
             };
             LabelShade = new()
             {
@@ -188,10 +187,10 @@
                 Margin = new Padding(0),
                 Size = new Size(20, 20),
             };
-            SwatchGrid.ColourChanged += (s, e) => 
-            { 
+            SwatchGrid.ColourChanged += (s, e) =>
+            {
                 GH_Skin.canvas_grid = SwatchGrid.Colour;
-                Instances.ActiveCanvas.Refresh();;
+                Instances.ActiveCanvas.Refresh();
             };
             LabelGrid = new()
             {
@@ -232,7 +231,7 @@
                 GH_Skin.palette_normal_standard.Fill = Color.DarkGray;
                 GH_Skin.palette_hidden_standard.Fill = Color.FromArgb(255, 104, 104, 104);
                 GH_Skin.palette_locked_standard.Fill = Color.FromArgb(255, 80, 80, 80);
-                Instances.ActiveCanvas.Refresh(); ;
+                Instances.ActiveCanvas.Refresh();
             };
             LayoutPanel.Controls.Add(DarkMode, 0, 3);
             LayoutPanel.SetColumnSpan(DarkMode, 4);
@@ -260,14 +259,14 @@
                 GH_Skin.canvas_grid_col = 150;
                 GH_Skin.canvas_grid_row = 50;
                 GH_Skin.wire_default = Color.Black;
-                GH_Skin.wire_selected_b = Color.FromArgb(50,0,0,0);
+                GH_Skin.wire_selected_b = Color.FromArgb(50, 0, 0, 0);
                 GH_Skin.palette_normal_standard.Fill = Color.FromArgb(255, 200, 200, 200);
                 GH_Skin.palette_normal_standard.Text = Color.Black;
                 GH_Skin.palette_locked_standard.Fill = Color.FromArgb(255, 120, 120, 120);
                 GH_Skin.palette_locked_standard.Text = Color.FromArgb(255, 70, 70, 70);
                 GH_Skin.palette_hidden_standard.Fill = Color.FromArgb(255, 140, 140, 155);
                 GH_Skin.palette_hidden_standard.Text = Color.FromArgb(255, 0, 0, 0);
-                Instances.ActiveCanvas.Refresh();;
+                Instances.ActiveCanvas.Refresh();
             };
             LayoutPanel.Controls.Add(ButtonReset, 0, 4);
             LayoutPanel.SetColumnSpan(ButtonReset, 4);

@@ -5,12 +5,12 @@
         internal static void Rename()
         {
             GH_Document document = Instances.ActiveCanvas.Document;
-            if(document == null) return;
+            if (document == null) return;
             var selected = document.SelectedObjects();
             var groups = selected.Where(o => o is GH_Group);
             if (!selected.Any() || !groups.Any())
             {
-                EF.MessageBox.Show("No GH_Group Selected", "Rename Group", EF.MessageBoxButtons.OK, EF.MessageBoxType.Information);
+                //EF.MessageBox.Show("No GH_Group Selected", "Rename Group", EF.MessageBoxButtons.OK, EF.MessageBoxType.Information);
                 return;
             }
             EF.Dialog form = new InputForm();
@@ -34,7 +34,7 @@
         private readonly EF.TextArea _textArea;
         public InputForm()
         {
-            Title = "Rename GH_Group: Multiline Name";
+            Title = "Rename GH_Group: Multiline Name - Melanoplus";
             Padding = new(10);
             Result = DialogResult.Cancel;
             MinimumSize = new ED.Size(300, 150);
@@ -61,7 +61,12 @@
             layout.AddRow(confirm);
 
             Content = layout;
+
+#if NET7_0_OR_GREATER
+            Rhino.UI.EtoExtensions.UseRhinoStyle(this);
+#else
             Reflection.R8.UseRhinoStyle(this);
+#endif
         }
 
         internal string GetText()
